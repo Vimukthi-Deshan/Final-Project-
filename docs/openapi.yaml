@@ -1,0 +1,254 @@
+openapi: 3.0.3
+info:
+  title: Canela Ceylon SCM API
+  version: 1.0.0
+  description: >-
+    Contract-first API for AI-integrated supply chain and blockchain traceability
+    operations.
+servers:
+  - url: http://localhost:4000
+    description: Local development
+paths:
+  /api/v1/health:
+    get:
+      tags: [system]
+      summary: Health check
+      responses:
+        "200":
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessEnvelope"
+  /api/v1/suppliers:
+    get:
+      tags: [suppliers]
+      summary: List suppliers
+      responses:
+        "200":
+          description: Supplier list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessEnvelope"
+    post:
+      tags: [suppliers]
+      summary: Create supplier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SupplierCreateRequest"
+      responses:
+        "201":
+          description: Supplier created
+  /api/v1/batches:
+    get:
+      tags: [batches]
+      summary: List batches
+      responses:
+        "200":
+          description: Batch list
+    post:
+      tags: [batches]
+      summary: Create batch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatchCreateRequest"
+      responses:
+        "201":
+          description: Batch created
+  /api/v1/inventory:
+    get:
+      tags: [inventory]
+      summary: Inventory by grade
+      responses:
+        "200":
+          description: Inventory data
+  /api/v1/export-docs/generate:
+    post:
+      tags: [export-docs]
+      summary: Generate export document
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExportDocGenerateRequest"
+      responses:
+        "201":
+          description: Document generated
+  /api/v1/grading/predict:
+    post:
+      tags: [grading]
+      summary: Predict grade from AI grading service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GradingPredictRequest"
+      responses:
+        "200":
+          description: Grade prediction
+  /api/v1/forecasting/predict:
+    post:
+      tags: [forecasting]
+      summary: Run forecasting service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForecastRequest"
+      responses:
+        "200":
+          description: Forecast output
+  /api/v1/blockchain-registration/{batchId}:
+    post:
+      tags: [blockchain-registration]
+      summary: Register batch metadata on Sepolia
+      parameters:
+        - in: path
+          name: batchId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Registration submitted
+  /api/v1/verify/{batchId}:
+    get:
+      tags: [public-traceability-verification]
+      summary: Public traceability lookup
+      parameters:
+        - in: path
+          name: batchId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Verification data
+components:
+  schemas:
+    SuccessEnvelope:
+      type: object
+      required: [success, data]
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+        meta:
+          type: object
+          additionalProperties: true
+    ErrorEnvelope:
+      type: object
+      required: [success, error]
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
+    SupplierCreateRequest:
+      type: object
+      required: [supplierId, name, contact, region]
+      properties:
+        supplierId:
+          type: string
+        name:
+          type: string
+        contact:
+          type: object
+          properties:
+            email: { type: string, format: email }
+            phone: { type: string }
+            address: { type: string }
+        region:
+          type: string
+        certifications:
+          type: array
+          items: { type: string }
+    BatchCreateRequest:
+      type: object
+      required: [batchId, sourceSuppliers, processingDate, exportDestination]
+      properties:
+        batchId:
+          type: string
+          pattern: "^CC-BATCH-[0-9]{4}-[0-9]{2}-[0-9]{5}$"
+        sourceSuppliers:
+          type: array
+          items:
+            type: object
+            required: [supplierId, contributionKg]
+            properties:
+              supplierId: { type: string }
+              contributionKg: { type: number }
+        processingDate:
+          type: string
+          format: date-time
+        qualityGrade:
+          type: string
+          enum: [Alba, C5, C4, Mexico, Hamburg]
+        exportDestination:
+          type: string
+        logisticsHandoverAt:
+          type: string
+          format: date-time
+    ExportDocGenerateRequest:
+      type: object
+      required: [documentType, batchId]
+      properties:
+        documentType:
+          type: string
+          enum:
+            [quotation, proforma_invoice, packing_list, certificate_of_origin]
+        batchId:
+          type: string
+    GradingPredictRequest:
+      type: object
+      required: [diameterMm, colorCategory, textureCategory]
+      properties:
+        diameterMm:
+          type: number
+        colorCategory:
+          type: string
+          enum:
+            - pale_golden_tan
+            - deep_yellow_golden_brown
+            - medium_brown_with_patches
+            - rough_dark_brown
+        textureCategory:
+          type: string
+          enum:
+            - immaculate
+            - very_clean_under_15_percent_spots
+            - moderately_patchy_40_to_60_percent
+            - rough_heavily_discoloured
+    ForecastRequest:
+      type: object
+      required: [model, horizonDays]
+      properties:
+        model:
+          type: string
+          enum: [naive, arima, prophet, lstm]
+        horizonDays:
+          type: integer
+          minimum: 1
+          maximum: 90

@@ -1,0 +1,12 @@
+# Source of truth for backend OpenAPI reference is docs/openapi.yaml.
+# This copy keeps backend-local tooling simple.
+openapi: 3.0.3
+info:
+  title: Canela Ceylon SCM API
+  version: 1.0.0
+paths:
+  /api/v1/health:
+    get:
+      responses:
+        "200":
+          description: ok

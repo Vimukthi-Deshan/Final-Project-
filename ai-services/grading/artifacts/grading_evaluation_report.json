@@ -1,0 +1,114 @@
+{
+  "track_1_real_data": {
+    "track": "real_track_1",
+    "accuracy": 1.0,
+    "confusion_matrix": [
+      [
+        10,
+        0
+      ],
+      [
+        0,
+        10
+      ]
+    ],
+    "feature_importance": {
+      "diameter": 0.329819,
+      "color": 0.570037,
+      "texture": 0.100144
+    },
+    "model": "random_forest",
+    "labels": [
+      "Alba",
+      "C5"
+    ]
+  },
+  "track_1_rule_baseline": {
+    "track": "real_track_1",
+    "accuracy": 1.0,
+    "confusion_matrix": [
+      [
+        10,
+        0
+      ],
+      [
+        0,
+        10
+      ]
+    ],
+    "feature_importance": {
+      "diameter": 0.6,
+      "color": 0.3,
+      "texture": 0.1
+    },
+    "model": "rule_based_baseline",
+    "labels": [
+      "Alba",
+      "C5"
+    ]
+  },
+  "track_2_generalization_test": {
+    "track": "generalization_test_track_2",
+    "accuracy": 0.0,
+    "confusion_matrix": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "feature_importance": {
+      "diameter": 0.33057,
+      "color": 0.585042,
+      "texture": 0.084387
+    },
+    "model": "random_forest",
+    "labels": [
+      "C4",
+      "Hamburg",
+      "Mexico"
+    ]
+  },
+  "track_2_rule_baseline_generalization_test": {
+    "track": "generalization_test_track_2",
+    "accuracy": 0.966667,
+    "confusion_matrix": [
+      [
+        10,
+        0,
+        0
+      ],
+      [
+        0,
+        10,
+        0
+      ],
+      [
+        0,
+        1,
+        9
+      ]
+    ],
+    "feature_importance": {
+      "diameter": 0.6,
+      "color": 0.3,
+      "texture": 0.1
+    },
+    "model": "rule_based_baseline",
+    "labels": [
+      "C4",
+      "Hamburg",
+      "Mexico"
+    ]
+  }
+}

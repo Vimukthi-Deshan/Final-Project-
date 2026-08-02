@@ -1,0 +1,7 @@
+{
+  "network": "sepolia",
+  "chainId": 11155111,
+  "implementationAddress": "0x0000000000000000000000000000000000000000",
+  "proxyAddress": "0x0000000000000000000000000000000000000000",
+  "deployedAt": "2026-07-29T00:00:00Z"
+}

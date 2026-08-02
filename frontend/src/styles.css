@@ -1,0 +1,177 @@
+:root {
+  --bg: #f8f5f1;
+  --panel: #fffdf9;
+  --text: #201c17;
+  --muted: #6c6258;
+  --accent: #ad4a27;
+  --accent-soft: #f7d8c7;
+  --line: #eadfd4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  background: radial-gradient(
+    circle at top left,
+    #fff8ef 0%,
+    #f7f1ea 38%,
+    #f8f5f1 100%
+  );
+  color: var(--text);
+}
+
+.shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.hero {
+  background: linear-gradient(120deg, #fffefb 0%, #faeee4 100%);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 1.5rem;
+}
+
+.hero h1 {
+  margin: 0.2rem 0 0.5rem;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+}
+
+.hero p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  font-size: 0.76rem;
+  color: var(--accent);
+}
+
+.nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.nav-card {
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  text-decoration: none;
+  text-align: center;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.nav-card.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.content {
+  margin-top: 1rem;
+}
+
+.page {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.25rem;
+}
+
+.page h2 {
+  margin: 0 0 0.5rem;
+}
+
+.page p {
+  margin-top: 0;
+  color: var(--muted);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.8rem;
+}
+
+.metric {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fffaf5;
+  padding: 0.95rem;
+}
+
+.metric h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.98rem;
+}
+
+.metric strong {
+  font-size: 1.35rem;
+}
+
+.form {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.8rem;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  padding: 0.7rem 0.75rem;
+  font: inherit;
+}
+
+button {
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.button-soft {
+  background: #efe1d5;
+  color: #3a2b1e;
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 0.4rem 0.8rem;
+}
+
+pre.metric {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  .shell {
+    padding: 1rem;
+  }
+
+  .kv {
+    grid-template-columns: 1fr;
+  }
+}
