@@ -1,7 +1,10 @@
 import { Router } from "express";
+import { keccak256, toUtf8Bytes } from "ethers";
 import { z } from "zod";
 
 import { fail, ok } from "../../middleware/response-envelope";
+import { upsertTraceabilityRecord } from "../traceability/traceability.store";
+import { TraceabilityService } from "../traceability/traceability.service";
 import {
   getSupplierByName,
   listSuppliers,
@@ -51,6 +54,7 @@ const supplierSchema = z.object({
     .object({
       txId: z.string().optional(),
       network: z.string().optional(),
+      chainId: z.number().int().optional(),
       contractAddress: z.string().optional(),
       hash: z.string().optional(),
       explorerUrl: z.string().optional(),
@@ -86,6 +90,8 @@ const supplierSchema = z.object({
   updatedBy: z.string().optional(),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
+  autoRecordOnChain: z.boolean().optional().default(false),
+  onChainProductCount: z.number().int().nonnegative().optional().default(0),
 });
 
 const router = Router();
@@ -113,7 +119,15 @@ router.post("/suppliers", async (req, res) => {
       return;
     }
 
-    const existing = await getSupplierByName(parsed.data.supplierName);
+    const normalizedSupplierName = parsed.data.supplierName.trim();
+    if (normalizedSupplierName.length < 2) {
+      res
+        .status(400)
+        .json(fail("INVALID_SUPPLIER_NAME", "Supplier name is too short."));
+      return;
+    }
+
+    const existing = await getSupplierByName(normalizedSupplierName);
     if (existing) {
       res
         .status(409)
@@ -121,7 +135,71 @@ router.post("/suppliers", async (req, res) => {
       return;
     }
 
-    const saved = await saveSupplier(parsed.data);
+    const autoRecordOnChain = parsed.data.autoRecordOnChain ?? false;
+    const onChainProductCount = parsed.data.onChainProductCount ?? 0;
+
+    const {
+      autoRecordOnChain: _autoRecordOnChain,
+      onChainProductCount: _onChainProductCount,
+      ...supplierInput
+    } = parsed.data;
+
+    let supplierToSave = {
+      ...supplierInput,
+      supplierName: normalizedSupplierName,
+    };
+
+    if (autoRecordOnChain) {
+      const canonicalPayload = {
+        supplierName: normalizedSupplierName,
+        contactPerson: supplierInput.contactPerson,
+        email: supplierInput.email,
+        phone: supplierInput.phone,
+        address: supplierInput.address,
+        city: supplierInput.city,
+        country: supplierInput.country,
+      };
+      const canonicalJson = JSON.stringify(canonicalPayload);
+      const dataHash = keccak256(toUtf8Bytes(canonicalJson));
+
+      const service = new TraceabilityService();
+      const chainResult = await service.recordSupplier({
+        mongoDbId: normalizedSupplierName,
+        dataHash,
+        productCount: onChainProductCount,
+      });
+
+      const explorerBase =
+        process.env.SEPOLIA_EXPLORER_BASE_URL ??
+        "https://sepolia.etherscan.io/tx";
+
+      await upsertTraceabilityRecord(normalizedSupplierName, {
+        dataHash,
+        productCount: onChainProductCount,
+        verifiedOnChain: false,
+        lastAction: "record",
+        txHash: chainResult.txHash,
+        network: chainResult.network,
+        chainId: chainResult.chainId,
+        contractAddress: chainResult.contractAddress,
+        blockNumber: chainResult.blockNumber,
+      });
+
+      supplierToSave = {
+        ...supplierInput,
+        blockchainRef: {
+          txId: chainResult.txHash,
+          network: chainResult.network,
+          chainId: chainResult.chainId,
+          contractAddress: chainResult.contractAddress,
+          hash: dataHash,
+          explorerUrl: `${explorerBase}/${chainResult.txHash}`,
+          recordedAt: new Date().toISOString(),
+        },
+      };
+    }
+
+    const saved = await saveSupplier(supplierToSave);
     res.status(201).json(ok(saved));
   } catch (error) {
     const message =

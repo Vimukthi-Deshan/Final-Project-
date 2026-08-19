@@ -30,6 +30,7 @@ export interface SupplierProduct {
 export interface SupplierBlockchainRef {
   txId?: string;
   network?: string;
+  chainId?: number;
   contractAddress?: string;
   hash?: string;
   explorerUrl?: string;

@@ -109,11 +109,11 @@ export default function ForecastingPage() {
   const [websiteFile, setWebsiteFile] = useState<File | undefined>(undefined);
   const [darazFile, setDarazFile] = useState<File | undefined>(undefined);
   const forecastView = result ? toForecastView(result) : null;
-  const forecastStats = forecastView
-    ? computeStats(forecastView.values)
-    : null;
+  const forecastStats = forecastView ? computeStats(forecastView.values) : null;
   const chartPoints = forecastView ? buildChartPoints(forecastView.values) : [];
-  const chartLine = chartPoints.map((point) => `${point.x},${point.y}`).join(" ");
+  const chartLine = chartPoints
+    .map((point) => `${point.x},${point.y}`)
+    .join(" ");
   const areaLine = chartPoints
     .map((point) => `${point.x},${point.y}`)
     .join(" ");
@@ -306,15 +306,32 @@ export default function ForecastingPage() {
                     aria-label="Forecast trend chart"
                     className="forecast-chart"
                   >
-                    <line x1="24" y1="232" x2="656" y2="232" className="axis-line" />
-                    <line x1="24" y1="18" x2="24" y2="232" className="axis-line" />
+                    <line
+                      x1="24"
+                      y1="232"
+                      x2="656"
+                      y2="232"
+                      className="axis-line"
+                    />
+                    <line
+                      x1="24"
+                      y1="18"
+                      x2="24"
+                      y2="232"
+                      className="axis-line"
+                    />
                     {areaPath ? (
                       <polygon className="forecast-area" points={areaPath} />
                     ) : null}
                     <polyline className="forecast-line" points={chartLine} />
                     {chartPoints.map((point) => (
                       <g key={`p-${point.day}-${point.value}`}>
-                        <circle cx={point.x} cy={point.y} r="3" className="forecast-dot" />
+                        <circle
+                          cx={point.x}
+                          cy={point.y}
+                          r="3"
+                          className="forecast-dot"
+                        />
                         <title>{`Day ${point.day}: ${point.value.toFixed(2)}`}</title>
                       </g>
                     ))}
@@ -342,7 +359,9 @@ export default function ForecastingPage() {
               </div>
             </>
           ) : (
-            <p className="help-text">Forecast returned in an unexpected format.</p>
+            <p className="help-text">
+              Forecast returned in an unexpected format.
+            </p>
           )}
         </section>
       ) : null}

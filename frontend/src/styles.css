@@ -155,6 +155,19 @@ body {
   font-weight: 600;
 }
 
+.checkbox-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #2f2a24;
+}
+
+.checkbox-inline input[type="checkbox"] {
+  width: auto;
+  padding: 0;
+}
+
 input,
 select,
 button {
@@ -241,8 +254,9 @@ button {
 }
 
 .mono-text {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
   font-size: 0.84rem;
   word-break: break-all;
 }

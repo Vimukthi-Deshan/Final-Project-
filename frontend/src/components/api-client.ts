@@ -79,6 +79,7 @@ export interface SupplierPayload {
   blockchainRef?: {
     txId?: string;
     network?: string;
+    chainId?: number;
     contractAddress?: string;
     hash?: string;
     explorerUrl?: string;
@@ -105,6 +106,8 @@ export interface SupplierPayload {
   updatedBy?: string;
   createdAt?: string;
   updatedAt?: string;
+  autoRecordOnChain?: boolean;
+  onChainProductCount?: number;
 }
 
 export interface BatchPayload {
@@ -249,18 +252,17 @@ export async function recordSupplierOnChain(
   mongoDbId: string,
   payload: SupplierChainRecordPayload,
 ) {
-  return request<Record<string, unknown>>(
-    `/blockchain-registration/${mongoDbId}`,
-    {
-      method: "POST",
-      body: JSON.stringify(payload),
-    },
-  );
+  const id = encodeURIComponent(mongoDbId.trim());
+  return request<Record<string, unknown>>(`/blockchain-registration/${id}`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 }
 
 export async function markSupplierVerifiedOnChain(mongoDbId: string) {
+  const id = encodeURIComponent(mongoDbId.trim());
   return request<Record<string, unknown>>(
-    `/blockchain-registration/${mongoDbId}/verify`,
+    `/blockchain-registration/${id}/verify`,
     {
       method: "POST",
     },
@@ -271,8 +273,9 @@ export async function updateSupplierProductCountOnChain(
   mongoDbId: string,
   productCount: number,
 ) {
+  const id = encodeURIComponent(mongoDbId.trim());
   return request<Record<string, unknown>>(
-    `/blockchain-registration/${mongoDbId}/products`,
+    `/blockchain-registration/${id}/products`,
     {
       method: "PATCH",
       body: JSON.stringify({ productCount }),
@@ -281,14 +284,17 @@ export async function updateSupplierProductCountOnChain(
 }
 
 export async function verifySupplierOnChain(mongoDbId: string) {
-  return request<Record<string, unknown>>(`/verify/${mongoDbId}`);
+  const id = encodeURIComponent(mongoDbId.trim());
+  return request<Record<string, unknown>>(`/verify/${id}`);
 }
 
 export async function verifySupplierHashOnChain(
   mongoDbId: string,
   dataHash: string,
 ) {
-  return request<{ valid: boolean }>(`/verify/${mongoDbId}/hash/${dataHash}`);
+  const id = encodeURIComponent(mongoDbId.trim());
+  const hash = encodeURIComponent(dataHash.trim());
+  return request<{ valid: boolean }>(`/verify/${id}/hash/${hash}`);
 }
 
 export interface BatchHybridVerificationResponse {
@@ -318,7 +324,8 @@ export interface BatchHybridVerificationResponse {
 }
 
 export async function verifyBatchHybrid(batchId: string) {
+  const normalizedBatchId = encodeURIComponent(batchId.trim());
   return request<BatchHybridVerificationResponse>(
-    `/traceability/batches/${batchId}/verify`,
+    `/traceability/batches/${normalizedBatchId}/verify`,
   );
 }

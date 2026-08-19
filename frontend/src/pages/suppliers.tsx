@@ -21,6 +21,8 @@ export default function SuppliersPage() {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [certification, setCertification] = useState("");
+  const [autoRecordOnChain, setAutoRecordOnChain] = useState(false);
+  const [onChainProductCount, setOnChainProductCount] = useState("0");
 
   async function refreshSuppliers() {
     const data = await listSuppliers();
@@ -57,11 +59,17 @@ export default function SuppliersPage() {
           .map((item) => item.trim())
           .filter(Boolean),
         reviews: [],
+        autoRecordOnChain,
+        onChainProductCount: Number(onChainProductCount),
       };
 
       await createSupplier(payload);
       await refreshSuppliers();
-      setStatus("Supplier saved successfully.");
+      setStatus(
+        autoRecordOnChain
+          ? "Supplier saved and recorded on Sepolia."
+          : "Supplier saved successfully.",
+      );
     } catch (submitError) {
       setError(
         submitError instanceof Error ? submitError.message : "Save failed",
@@ -132,6 +140,26 @@ export default function SuppliersPage() {
             onChange={(event) => setCertification(event.target.value)}
           />
         </div>
+        <label className="checkbox-inline">
+          <input
+            type="checkbox"
+            checked={autoRecordOnChain}
+            onChange={(event) => setAutoRecordOnChain(event.target.checked)}
+          />
+          <span>Auto-record this supplier on Sepolia</span>
+        </label>
+        {autoRecordOnChain ? (
+          <div className="row">
+            <input
+              type="number"
+              min={0}
+              placeholder="On-chain product count"
+              value={onChainProductCount}
+              onChange={(event) => setOnChainProductCount(event.target.value)}
+              required
+            />
+          </div>
+        ) : null}
         <button type="submit" disabled={loading}>
           {loading ? "Saving..." : "Save Supplier"}
         </button>

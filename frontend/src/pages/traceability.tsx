@@ -74,11 +74,16 @@ export default function TraceabilityPage() {
     <section className="page">
       <h2>Blockchain Traceability</h2>
       <p>Record and verify supplier trust data on Sepolia.</p>
+      <p>
+        Saving a supplier in Supplier Management stores data in MongoDB only. To
+        appear on-chain, you must run "Record Supplier On-Chain" with the same
+        supplier ID used in batches.
+      </p>
       {error ? <p className="status-error">{error}</p> : null}
       <form className="form" onSubmit={onRecordSupplier}>
         <div className="row">
           <input
-            placeholder="Supplier MongoDB ID (example: supplier-002)"
+            placeholder="Supplier ID used in batch (example: Demo Cinnamon Supplier B)"
             value={mongoDbId}
             onChange={(event) => setMongoDbId(event.target.value)}
             required
