@@ -1,0 +1,58 @@
+0 verbose cli /Users/vimukthideshan/.nvm/versions/node/v23.1.0/bin/node /Users/vimukthideshan/.nvm/versions/node/v23.1.0/bin/npm
+1 info using npm@11.4.2
+2 info using node@v23.1.0
+3 silly config load:file:/Users/vimukthideshan/.nvm/versions/node/v23.1.0/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/vimukthideshan/Final Project/canela-ceylon-scm/blockchain/.npmrc
+5 silly config load:file:/Users/vimukthideshan/.npmrc
+6 silly config load:file:/Users/vimukthideshan/.nvm/versions/node/v23.1.0/etc/npmrc
+7 verbose title npm install
+8 verbose argv "install"
+9 verbose logfile logs-max:10 dir:/Users/vimukthideshan/Final Project/canela-ceylon-scm/blockchain/.npm-cache/_logs/2026-08-06T07_16_21_078Z-
+10 verbose logfile /Users/vimukthideshan/Final Project/canela-ceylon-scm/blockchain/.npm-cache/_logs/2026-08-06T07_16_21_078Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 http fetch GET 403 https://registry.npmjs.org/npm 14ms
+14 silly idealTree buildDeps
+15 silly fetch manifest @nomicfoundation/hardhat-toolbox-mocha-ethers@^3.0.0
+16 silly packumentCache full:https://registry.npmjs.org/@nomicfoundation%2fhardhat-toolbox-mocha-ethers cache-miss
+17 http fetch GET 403 https://registry.npmjs.org/@nomicfoundation%2fhardhat-toolbox-mocha-ethers 3ms (cache skip)
+18 silly fetch manifest dotenv@^16.4.7
+19 silly packumentCache full:https://registry.npmjs.org/dotenv cache-miss
+20 http fetch GET 403 https://registry.npmjs.org/dotenv 2ms (cache skip)
+21 silly fetch manifest hardhat@^3.0.0
+22 silly packumentCache full:https://registry.npmjs.org/hardhat cache-miss
+23 http fetch GET 403 https://registry.npmjs.org/hardhat 1ms (cache skip)
+24 silly fetch manifest typescript@^5.7.3
+25 silly packumentCache full:https://registry.npmjs.org/typescript cache-miss
+26 http fetch GET 403 https://registry.npmjs.org/typescript 1ms (cache skip)
+27 silly placeDep ROOT @nomicfoundation/hardhat-toolbox-mocha-ethers@ OK for: canela-ceylon-blockchain@0.1.0 want: ^3.0.0
+28 silly placeDep ROOT dotenv@ OK for: canela-ceylon-blockchain@0.1.0 want: ^16.4.7
+29 silly placeDep ROOT hardhat@ OK for: canela-ceylon-blockchain@0.1.0 want: ^3.0.0
+30 silly placeDep ROOT typescript@ OK for: canela-ceylon-blockchain@0.1.0 want: ^5.7.3
+31 verbose stack HttpErrorGeneral: 403 Forbidden - GET https://registry.npmjs.org/@nomicfoundation%2fhardhat-toolbox-mocha-ethers
+31 verbose stack     at /Users/vimukthideshan/.nvm/versions/node/v23.1.0/lib/node_modules/npm/node_modules/npm-registry-fetch/lib/check-response.js:103:15
+31 verbose stack     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+31 verbose stack     at async RegistryFetcher.packument (/Users/vimukthideshan/.nvm/versions/node/v23.1.0/lib/node_modules/npm/node_modules/pacote/lib/registry.js:90:19)
+31 verbose stack     at async RegistryFetcher.manifest (/Users/vimukthideshan/.nvm/versions/node/v23.1.0/lib/node_modules/npm/node_modules/pacote/lib/registry.js:128:23)
+31 verbose stack     at async #fetchManifest (/Users/vimukthideshan/.nvm/versions/node/v23.1.0/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:1213:20)
+31 verbose stack     at async #nodeFromEdge (/Users/vimukthideshan/.nvm/versions/node/v23.1.0/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:1051:19)
+31 verbose stack     at async #buildDepStep (/Users/vimukthideshan/.nvm/versions/node/v23.1.0/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:915:11)
+31 verbose stack     at async Arborist.buildIdealTree (/Users/vimukthideshan/.nvm/versions/node/v23.1.0/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:182:7)
+31 verbose stack     at async Promise.all (index 1)
+31 verbose stack     at async Arborist.reify (/Users/vimukthideshan/.nvm/versions/node/v23.1.0/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:131:5)
+32 verbose statusCode 403
+33 verbose pkgid @nomicfoundation/hardhat-toolbox-mocha-ethers@^3.0.0
+34 error code E403
+35 error 403 403 Forbidden - GET https://registry.npmjs.org/@nomicfoundation%2fhardhat-toolbox-mocha-ethers
+36 error 403 In most cases, you or one of your dependencies are requesting
+36 error 403 a package version that is forbidden by your security policy, or
+36 error 403 on a server you do not have access to.
+37 silly unfinished npm timer reify 1786000581188
+38 silly unfinished npm timer reify:loadTrees 1786000581188
+39 verbose cwd /Users/vimukthideshan/Final Project/canela-ceylon-scm/blockchain
+40 verbose os Darwin 25.5.0
+41 verbose node v23.1.0
+42 verbose npm  v11.4.2
+43 verbose exit 1
+44 verbose code 1
+45 error A complete log of this run can be found in: /Users/vimukthideshan/Final Project/canela-ceylon-scm/blockchain/.npm-cache/_logs/2026-08-06T07_16_21_078Z-debug-0.log

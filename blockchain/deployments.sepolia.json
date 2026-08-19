@@ -1,0 +1,9 @@
+{
+  "network": "sepolia",
+  "deployer": "0x78C6302Dfe3507Cf317d5A36870fA55B899f660D",
+  "implementationAddress": "0x5c1a9ab635CeA67b28882D76176368C470fd46CB",
+  "proxyAddress": "0xE786172a0429A73e59C0733024340Af0Ed9509eE",
+  "supplierRegistryImplementationAddress": "0x5c1a9ab635CeA67b28882D76176368C470fd46CB",
+  "supplierRegistryProxyAddress": "0xE786172a0429A73e59C0733024340Af0Ed9509eE",
+  "deployedAt": "2026-08-07T06:57:36.835Z"
+}

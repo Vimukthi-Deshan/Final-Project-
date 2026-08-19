@@ -1,0 +1,46 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-cd62c4ce8a6434800949b71ff7102d6cefd90734",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "compilerType": "solc",
+  "userSourceNameMap": {
+    "contracts/BatchRegistry.sol": "project/contracts/BatchRegistry.sol",
+    "contracts/IBatchRegistry.sol": "project/contracts/IBatchRegistry.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode.linkReferences",
+            "evm.bytecode.object",
+            "evm.bytecode.opcodes",
+            "evm.bytecode.sourceMap",
+            "evm.deployedBytecode.immutableReferences",
+            "evm.deployedBytecode.linkReferences",
+            "evm.deployedBytecode.object",
+            "evm.deployedBytecode.opcodes",
+            "evm.deployedBytecode.sourceMap",
+            "evm.methodIdentifiers"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/BatchRegistry.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport \"./IBatchRegistry.sol\";\n\ncontract BatchRegistry is IBatchRegistry {\n    mapping(string => SupplierRecord) public suppliers;\n    mapping(string => bool) public registeredSuppliers;\n\n    address public admin;\n    uint256 public totalSuppliers;\n\n    modifier onlyAdmin() {\n        require(msg.sender == admin, \"Only admin can perform this action\");\n        _;\n    }\n\n    constructor() {\n        admin = msg.sender;\n        totalSuppliers = 0;\n    }\n\n    function recordSupplier(\n        string calldata mongoDbId,\n        bytes32 dataHash,\n        uint256 productCount\n    ) external override returns (bool) {\n        require(!registeredSuppliers[mongoDbId], \"Supplier already recorded\");\n        require(dataHash != bytes32(0), \"Invalid hash\");\n\n        suppliers[mongoDbId] = SupplierRecord({\n            dataHash: dataHash,\n            recordedBy: msg.sender,\n            recordedAt: block.timestamp,\n            isVerified: false,\n            verifiedBy: address(0),\n            verificationTimestamp: 0,\n            productCount: productCount,\n            mongoDbId: mongoDbId\n        });\n\n        registeredSuppliers[mongoDbId] = true;\n        totalSuppliers++;\n\n        emit SupplierRecorded(mongoDbId, dataHash, msg.sender, block.timestamp);\n        return true;\n    }\n\n    function verifySupplier(string calldata mongoDbId)\n        external\n        override\n        onlyAdmin\n        returns (bool)\n    {\n        require(registeredSuppliers[mongoDbId], \"Supplier not found\");\n        require(!suppliers[mongoDbId].isVerified, \"Already verified\");\n\n        suppliers[mongoDbId].isVerified = true;\n        suppliers[mongoDbId].verifiedBy = msg.sender;\n        suppliers[mongoDbId].verificationTimestamp = block.timestamp;\n\n        emit SupplierVerified(mongoDbId, msg.sender, true, block.timestamp);\n        return true;\n    }\n\n    function updateProductCount(string calldata mongoDbId, uint256 newProductCount)\n        external\n        override\n        returns (bool)\n    {\n        require(registeredSuppliers[mongoDbId], \"Supplier not found\");\n\n        suppliers[mongoDbId].productCount = newProductCount;\n\n        emit SupplierProductsUpdated(mongoDbId, newProductCount, block.timestamp);\n        return true;\n    }\n\n    function getSupplier(string calldata mongoDbId)\n        external\n        view\n        override\n        returns (SupplierRecord memory)\n    {\n        require(registeredSuppliers[mongoDbId], \"Supplier not found\");\n        return suppliers[mongoDbId];\n    }\n\n    function verifySupplierHash(string calldata mongoDbId, bytes32 dataHash)\n        external\n        view\n        override\n        returns (bool)\n    {\n        if (!registeredSuppliers[mongoDbId]) {\n            return false;\n        }\n\n        return suppliers[mongoDbId].dataHash == dataHash;\n    }\n\n    function isSupplierVerified(string calldata mongoDbId)\n        external\n        view\n        override\n        returns (bool)\n    {\n        if (!registeredSuppliers[mongoDbId]) {\n            return false;\n        }\n\n        return suppliers[mongoDbId].isVerified;\n    }\n\n    function transferAdmin(address newAdmin) external onlyAdmin {\n        require(newAdmin != address(0), \"Invalid address\");\n        admin = newAdmin;\n    }\n\n    function rejectSupplier(string calldata mongoDbId)\n        external\n        onlyAdmin\n        returns (bool)\n    {\n        require(registeredSuppliers[mongoDbId], \"Supplier not found\");\n        registeredSuppliers[mongoDbId] = false;\n        return true;\n    }\n}\n"
+      },
+      "project/contracts/IBatchRegistry.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ninterface IBatchRegistry {\n    struct SupplierRecord {\n        bytes32 dataHash;\n        address recordedBy;\n        uint256 recordedAt;\n        bool isVerified;\n        address verifiedBy;\n        uint256 verificationTimestamp;\n        uint256 productCount;\n        string mongoDbId;\n    }\n\n    event SupplierRecorded(\n        string indexed mongoDbId,\n        bytes32 indexed dataHash,\n        address indexed recorder,\n        uint256 timestamp\n    );\n\n    event SupplierVerified(\n        string indexed mongoDbId,\n        address indexed verifier,\n        bool isVerified,\n        uint256 timestamp\n    );\n\n    event SupplierProductsUpdated(\n        string indexed mongoDbId,\n        uint256 productCount,\n        uint256 timestamp\n    );\n\n    function recordSupplier(\n        string calldata mongoDbId,\n        bytes32 dataHash,\n        uint256 productCount\n    ) external returns (bool);\n\n    function verifySupplier(string calldata mongoDbId)\n        external\n        returns (bool);\n\n    function updateProductCount(\n        string calldata mongoDbId,\n        uint256 newProductCount\n    ) external returns (bool);\n\n    function getSupplier(string calldata mongoDbId)\n        external\n        view\n        returns (SupplierRecord memory);\n\n    function verifySupplierHash(string calldata mongoDbId, bytes32 dataHash)\n        external\n        view\n        returns (bool);\n\n    function isSupplierVerified(string calldata mongoDbId)\n        external\n        view\n        returns (bool);\n\n    function registeredSuppliers(string calldata mongoDbId)\n        external\n        view\n        returns (bool);\n\n    function totalSuppliers() external view returns (uint256);\n}\n"
+      }
+    }
+  }
+}

@@ -1,6 +1,11 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from time import perf_counter
 from typing import Callable, Dict, List
+
+from data_utils import load_forecast_series
+from models.common import ar_like_forecast, lightweight_lstm_forecast, naive_forecast, prophet_style_forecast
 
 
 @dataclass
@@ -58,3 +63,23 @@ def as_table_row(result: ModelResult) -> Dict[str, object]:
         "Interpretability": result.interpretability,
         "Deployment Decision": result.deployment_decision,
     }
+
+
+def run_forecasting_benchmark() -> List[ModelResult]:
+    series = load_forecast_series().values
+    split_index = max(30, int(len(series) * 0.8))
+    train_series = series[:split_index]
+    test_series = series[split_index:]
+
+    return [
+        evaluate_model("naive", naive_forecast, train_series, test_series, "Very high"),
+        evaluate_model("arima", ar_like_forecast, train_series, test_series, "High"),
+        evaluate_model("prophet", prophet_style_forecast, train_series, test_series, "Medium"),
+        evaluate_model("lstm", lightweight_lstm_forecast, train_series, test_series, "Low"),
+    ]
+
+
+if __name__ == "__main__":
+    results = run_forecasting_benchmark()
+    for result in results:
+        print(as_table_row(result))

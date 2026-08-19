@@ -20,32 +20,29 @@ const navItems = [
 
 export default function App() {
   return (
-    <div className="shell">
-      <header className="hero">
-        <p className="eyebrow">Canela Ceylon</p>
-        <h1>AI-Integrated Supply Chain Management System</h1>
-        <p>
-          Restored React frontend shell for supply-chain operations, grading,
-          forecasting, and blockchain traceability flows.
-        </p>
+    <div className="app-layout">
+      <header className="topbar">
+        <div className="brand-group">
+          <span className="brand-text">Canela Trace</span>
+        </div>
+        <span className="env-pill">Production</span>
+        <nav className="topbar-nav" aria-label="Main navigation">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === "/"}
+              className={({ isActive }) =>
+                isActive ? "topbar-link active" : "topbar-link"
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
       </header>
 
-      <nav className="nav-grid" aria-label="Main navigation">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.to === "/"}
-            className={({ isActive }) =>
-              isActive ? "nav-card active" : "nav-card"
-            }
-          >
-            {item.label}
-          </NavLink>
-        ))}
-      </nav>
-
-      <main className="content">
+      <main className="layout-content">
         <Routes>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/suppliers" element={<SuppliersPage />} />

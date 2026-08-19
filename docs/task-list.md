@@ -2,38 +2,33 @@
 
 ## Current Status
 
-- Frontend: Partially restored; source runtime files rebuilt and routed app shell restored.
-- Backend: Scaffold only, with traceability service/routes drafted but no runnable Express server.
+- Frontend: Restored and buildable from source. Runtime/config files and routed shell are back in place.
+- Backend: Runnable Express server with module-grouped /api/v1 routes, MongoDB-backed suppliers/batches/traceability persistence, and startup readiness checks for MongoDB + Sepolia contract connectivity.
 - AI Grading: Dataset, training pipeline, and FastAPI service exist.
 - AI Forecasting: Placeholder code exists but real models/evaluation remain unfinished.
-- Blockchain: Contracts and deployment script exist, but Hardhat runtime configuration is incomplete.
+- Blockchain: Supplier registry deployment script and Sepolia deployment flow exist; backend integrates with deployed proxy using ethers v6.
 
 ## Priority Order
 
-1. Restore frontend runnable state and keep it stable.
-2. Bootstrap backend runtime and mount `/api/v1` routes.
-3. Implement MongoDB models and CRUD for suppliers and batches.
-4. Connect traceability routes to live backend runtime.
-5. Complete Hardhat configuration and Sepolia deployment workflow.
-6. Replace frontend placeholders with live API integration.
-7. Finish forecasting implementations and comparison reporting.
-8. Add Jest, pytest, k6, and end-to-end coverage.
-9. Align OpenAPI spec with running implementation.
-10. Prepare final evaluation and report artefacts.
+1. Execute end-to-end runtime smoke tests with real external services (Mongo Atlas + Sepolia).
+2. Align OpenAPI 3.0 specs with current live backend routes and envelopes.
+3. Finish forecasting implementations and comparison reporting.
+4. Add Jest, pytest, k6, and end-to-end coverage.
+5. Prepare final evaluation and report artefacts.
 
 ## Near-Term Deliverables
 
 ### Frontend
 
-- Rebuild `package.json`, `index.html`, Vite config, TypeScript config, and app entry.
-- Restore navigation and route mounting around existing pages.
-- Reconnect pages to backend APIs once backend runtime is live.
+- Source runtime is restored and validated with build.
+- Route shell/navigation are restored and API-connected pages are in place.
+- Perform browser-based acceptance checks against a running backend.
 
 ### Backend
 
-- Create `package.json`, TypeScript config, Express app, and server entry.
-- Add health route, error middleware, and rate-limiter stub.
-- Mount traceability routes under `/api/v1`.
+- Keep startup readiness checks healthy for MongoDB and Sepolia contract connectivity.
+- Complete endpoint-level smoke testing for suppliers, batches, inventory, traceability, grading, and forecasting routes.
+- Ensure deployment-time environment values are documented and consistent.
 
 ### Data and AI
 
@@ -43,13 +38,12 @@
 
 ### Blockchain
 
-- Add Hardhat project config and dependency manifest.
-- Deploy proxy + implementation to Sepolia.
-- Store proxy address in backend environment configuration.
+- Keep Sepolia-only deployment and backend proxy wiring stable.
+- Verify deployed ABI compatibility against backend startup checks after each redeploy.
 
 ## Acceptance Targets
 
 - Frontend runs locally from source with `npm run dev`.
 - Backend starts locally and serves `/api/v1/health`.
 - Grading model trains from local CSV data.
-- Traceability registration and verification work through backend once Sepolia config is provided.
+- Traceability registration and verification work through backend with configured Sepolia credentials and deployed proxy address.

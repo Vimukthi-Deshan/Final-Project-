@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 from typing import Iterable, List
+
+from .common import ar_like_forecast
 
 
 def forecast_arima(series: Iterable[float], horizon: int) -> List[float]:
-    values = list(series)
-    if not values:
-        return [0.0] * horizon
-    return [values[-1]] * horizon
+    return ar_like_forecast(series, horizon)

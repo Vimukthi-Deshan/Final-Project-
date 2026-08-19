@@ -1,0 +1,359 @@
+0 verbose cli /Users/vimukthideshan/.nvm/versions/node/v23.1.0/bin/node /Users/vimukthideshan/.nvm/versions/node/v23.1.0/bin/npm
+1 info using npm@11.4.2
+2 info using node@v23.1.0
+3 silly config load:file:/Users/vimukthideshan/.nvm/versions/node/v23.1.0/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/vimukthideshan/Final Project/canela-ceylon-scm/blockchain/.npmrc
+5 silly config load:file:/Users/vimukthideshan/.npmrc
+6 silly config load:file:/Users/vimukthideshan/.nvm/versions/node/v23.1.0/etc/npmrc
+7 verbose title npm install
+8 verbose argv "install"
+9 verbose logfile logs-max:10 dir:/Users/vimukthideshan/Final Project/canela-ceylon-scm/blockchain/.npm-cache/_logs/2026-08-06T07_21_06_890Z-
+10 verbose logfile /Users/vimukthideshan/Final Project/canela-ceylon-scm/blockchain/.npm-cache/_logs/2026-08-06T07_21_06_890Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 silly idealTree buildDeps
+14 silly reify moves {}
+15 silly audit bulk request {
+15 silly audit   '@adraffy/ens-normalize': [ '1.11.1' ],
+15 silly audit   '@cto.af/wtf8': [ '0.0.5' ],
+15 silly audit   '@esbuild/aix-ppc64': [ '0.28.1' ],
+15 silly audit   '@esbuild/android-arm': [ '0.28.1' ],
+15 silly audit   '@esbuild/android-arm64': [ '0.28.1' ],
+15 silly audit   '@esbuild/android-x64': [ '0.28.1' ],
+15 silly audit   '@esbuild/darwin-arm64': [ '0.28.1' ],
+15 silly audit   '@esbuild/darwin-x64': [ '0.28.1' ],
+15 silly audit   '@esbuild/freebsd-arm64': [ '0.28.1' ],
+15 silly audit   '@esbuild/freebsd-x64': [ '0.28.1' ],
+15 silly audit   '@esbuild/linux-arm': [ '0.28.1' ],
+15 silly audit   '@esbuild/linux-arm64': [ '0.28.1' ],
+15 silly audit   '@esbuild/linux-ia32': [ '0.28.1' ],
+15 silly audit   '@esbuild/linux-loong64': [ '0.28.1' ],
+15 silly audit   '@esbuild/linux-mips64el': [ '0.28.1' ],
+15 silly audit   '@esbuild/linux-ppc64': [ '0.28.1' ],
+15 silly audit   '@esbuild/linux-riscv64': [ '0.28.1' ],
+15 silly audit   '@esbuild/linux-s390x': [ '0.28.1' ],
+15 silly audit   '@esbuild/linux-x64': [ '0.28.1' ],
+15 silly audit   '@esbuild/netbsd-arm64': [ '0.28.1' ],
+15 silly audit   '@esbuild/netbsd-x64': [ '0.28.1' ],
+15 silly audit   '@esbuild/openbsd-arm64': [ '0.28.1' ],
+15 silly audit   '@esbuild/openbsd-x64': [ '0.28.1' ],
+15 silly audit   '@esbuild/openharmony-arm64': [ '0.28.1' ],
+15 silly audit   '@esbuild/sunos-x64': [ '0.28.1' ],
+15 silly audit   '@esbuild/win32-arm64': [ '0.28.1' ],
+15 silly audit   '@esbuild/win32-ia32': [ '0.28.1' ],
+15 silly audit   '@esbuild/win32-x64': [ '0.28.1' ],
+15 silly audit   '@ethersproject/abi': [ '5.8.0' ],
+15 silly audit   '@ethersproject/abstract-provider': [ '5.8.0' ],
+15 silly audit   '@ethersproject/abstract-signer': [ '5.8.0' ],
+15 silly audit   '@ethersproject/address': [ '5.8.0' ],
+15 silly audit   '@ethersproject/base64': [ '5.8.0' ],
+15 silly audit   '@ethersproject/bignumber': [ '5.8.0' ],
+15 silly audit   '@ethersproject/bytes': [ '5.8.0' ],
+15 silly audit   '@ethersproject/constants': [ '5.8.0' ],
+15 silly audit   '@ethersproject/hash': [ '5.8.0' ],
+15 silly audit   '@ethersproject/keccak256': [ '5.8.0' ],
+15 silly audit   '@ethersproject/logger': [ '5.8.0' ],
+15 silly audit   '@ethersproject/networks': [ '5.8.0' ],
+15 silly audit   '@ethersproject/properties': [ '5.8.0' ],
+15 silly audit   '@ethersproject/rlp': [ '5.8.0' ],
+15 silly audit   '@ethersproject/signing-key': [ '5.8.0' ],
+15 silly audit   '@ethersproject/strings': [ '5.8.0' ],
+15 silly audit   '@ethersproject/transactions': [ '5.8.0' ],
+15 silly audit   '@ethersproject/web': [ '5.8.0' ],
+15 silly audit   '@isaacs/cliui': [ '8.0.2' ],
+15 silly audit   'ansi-regex': [ '6.2.2', '5.0.1' ],
+15 silly audit   'strip-ansi': [ '7.2.0', '6.0.1' ],
+15 silly audit   '@noble/ciphers': [ '1.2.1' ],
+15 silly audit   '@noble/curves': [ '1.4.2', '1.2.0', '1.8.2' ],
+15 silly audit   '@noble/hashes': [ '1.4.0', '1.7.1', '1.3.2', '1.7.2' ],
+15 silly audit   '@nomicfoundation/edr': [ '0.15.0' ],
+15 silly audit   '@nomicfoundation/edr-darwin-arm64': [ '0.15.0' ],
+15 silly audit   '@nomicfoundation/edr-darwin-x64': [ '0.15.0' ],
+15 silly audit   '@nomicfoundation/edr-linux-arm64-gnu': [ '0.15.0' ],
+15 silly audit   '@nomicfoundation/edr-linux-arm64-musl': [ '0.15.0' ],
+15 silly audit   '@nomicfoundation/edr-linux-x64-gnu': [ '0.15.0' ],
+15 silly audit   '@nomicfoundation/edr-linux-x64-musl': [ '0.15.0' ],
+15 silly audit   '@nomicfoundation/edr-win32-x64-msvc': [ '0.15.0' ],
+15 silly audit   '@nomicfoundation/hardhat-errors': [ '3.0.18' ],
+15 silly audit   '@nomicfoundation/hardhat-ethers': [ '4.0.15' ],
+15 silly audit   '@nomicfoundation/hardhat-ethers-chai-matchers': [ '3.0.11' ],
+15 silly audit   '@nomicfoundation/hardhat-ignition': [ '3.1.8' ],
+15 silly audit   '@nomicfoundation/hardhat-ignition-ethers': [ '3.1.6' ],
+15 silly audit   '@nomicfoundation/hardhat-keystore': [ '3.0.12' ],
+15 silly audit   '@nomicfoundation/hardhat-mocha': [ '3.1.0' ],
+15 silly audit   '@nomicfoundation/hardhat-network-helpers': [ '3.0.11' ],
+15 silly audit   '@nomicfoundation/hardhat-toolbox-mocha-ethers': [ '3.0.7' ],
+15 silly audit   '@nomicfoundation/hardhat-typechain': [ '3.1.1' ],
+15 silly audit   '@nomicfoundation/hardhat-utils': [ '4.1.7' ],
+15 silly audit   '@nomicfoundation/hardhat-vendored': [ '3.0.4' ],
+15 silly audit   '@nomicfoundation/hardhat-verify': [ '3.0.22' ],
+15 silly audit   '@nomicfoundation/hardhat-zod-utils': [ '3.0.5' ],
+15 silly audit   '@nomicfoundation/ignition-core': [ '3.1.9' ],
+15 silly audit   '@nomicfoundation/ignition-ui': [ '3.1.2' ],
+15 silly audit   '@nomicfoundation/solidity-analyzer': [ '0.1.2' ],
+15 silly audit   '@nomicfoundation/solidity-analyzer-darwin-arm64': [ '0.1.2' ],
+15 silly audit   '@nomicfoundation/solidity-analyzer-darwin-x64': [ '0.1.2' ],
+15 silly audit   '@nomicfoundation/solidity-analyzer-linux-arm64-gnu': [ '0.1.2' ],
+15 silly audit   '@nomicfoundation/solidity-analyzer-linux-arm64-musl': [ '0.1.2' ],
+15 silly audit   '@nomicfoundation/solidity-analyzer-linux-x64-gnu': [ '0.1.2' ],
+15 silly audit   '@nomicfoundation/solidity-analyzer-linux-x64-musl': [ '0.1.2' ],
+15 silly audit   '@nomicfoundation/solidity-analyzer-win32-x64-msvc': [ '0.1.2' ],
+15 silly audit   '@pkgjs/parseargs': [ '0.11.0' ],
+15 silly audit   '@scure/base': [ '1.1.9', '1.2.6' ],
+15 silly audit   '@scure/bip32': [ '1.4.0' ],
+15 silly audit   '@scure/bip39': [ '1.3.0' ],
+15 silly audit   '@sentry/core': [ '9.47.1' ],
+15 silly audit   '@streamparser/json': [ '0.0.22' ],
+15 silly audit   '@streamparser/json-node': [ '0.0.22' ],
+15 silly audit   '@typechain/ethers-v6': [ '0.5.1' ],
+15 silly audit   '@types/chai': [ '5.2.3' ],
+15 silly audit   '@types/chai-as-promised': [ '8.0.2' ],
+15 silly audit   '@types/deep-eql': [ '4.0.2' ],
+15 silly audit   '@types/node': [ '22.7.5' ],
+15 silly audit   '@types/prettier': [ '2.7.3' ],
+15 silly audit   'adm-zip': [ '0.6.0' ],
+15 silly audit   'aes-js': [ '4.0.0-beta.5' ],
+15 silly audit   'ansi-colors': [ '4.1.3' ],
+15 silly audit   'ansi-styles': [ '4.3.0', '3.2.1', '6.2.3' ],
+15 silly audit   argparse: [ '2.0.1' ],
+15 silly audit   'array-back': [ '3.1.0', '4.0.2' ],
+15 silly audit   'assertion-error': [ '2.0.1' ],
+15 silly audit   'balanced-match': [ '1.0.2' ],
+15 silly audit   'bn.js': [ '5.2.5', '4.12.5' ],
+15 silly audit   'brace-expansion': [ '2.1.4', '1.1.18' ],
+15 silly audit   brorand: [ '1.1.0' ],
+15 silly audit   'browser-stdout': [ '1.3.1' ],
+15 silly audit   camelcase: [ '6.3.0' ],
+15 silly audit   cbor2: [ '2.3.0' ],
+15 silly audit   chai: [ '6.2.2' ],
+15 silly audit   'chai-as-promised': [ '8.0.2' ],
+15 silly audit   chalk: [ '4.1.2', '2.4.2' ],
+15 silly audit   'supports-color': [ '7.2.0', '5.5.0', '8.1.1' ],
+15 silly audit   'check-error': [ '2.1.3' ],
+15 silly audit   chokidar: [ '5.0.0', '4.0.3' ],
+15 silly audit   cliui: [ '8.0.1' ],
+15 silly audit   'emoji-regex': [ '8.0.0', '9.2.2' ],
+15 silly audit   'string-width': [ '4.2.3', '5.1.2' ],
+15 silly audit   'wrap-ansi': [ '7.0.0', '8.1.0' ],
+15 silly audit   'color-convert': [ '2.0.1', '1.9.3' ],
+15 silly audit   'color-name': [ '1.1.4', '1.1.3' ],
+15 silly audit   'command-line-args': [ '5.2.1' ],
+15 silly audit   'command-line-usage': [ '6.1.3' ],
+15 silly audit   'escape-string-regexp': [ '1.0.5', '4.0.0' ],
+15 silly audit   'has-flag': [ '3.0.0', '4.0.0' ],
+15 silly audit   typical: [ '5.2.0', '4.0.0' ],
+15 silly audit   'concat-map': [ '0.0.1' ],
+15 silly audit   'cross-spawn': [ '7.0.6' ],
+15 silly audit   debug: [ '4.4.3' ],
+15 silly audit   decamelize: [ '4.0.0' ],
+15 silly audit   'deep-eql': [ '5.0.2' ],
+15 silly audit   'deep-extend': [ '0.6.0' ],
+15 silly audit   diff: [ '7.0.0' ],
+15 silly audit   dotenv: [ '16.6.1' ],
+15 silly audit   eastasianwidth: [ '0.2.0' ],
+15 silly audit   elliptic: [ '6.6.1' ],
+15 silly audit   enquirer: [ '2.4.1' ],
+15 silly audit   'env-paths': [ '4.0.0' ],
+15 silly audit   esbuild: [ '0.28.1' ],
+15 silly audit   escalade: [ '3.2.0' ],
+15 silly audit   'ethereum-cryptography': [ '2.2.1' ],
+15 silly audit   ethers: [ '6.17.0' ],
+15 silly audit   'fast-equals': [ '5.4.1' ],
+15 silly audit   'find-replace': [ '3.0.0' ],
+15 silly audit   'find-up': [ '5.0.0' ],
+15 silly audit   flat: [ '5.0.2' ],
+15 silly audit   'foreground-child': [ '3.3.1' ],
+15 silly audit   'fs-extra': [ '7.0.1' ],
+15 silly audit   'fs.realpath': [ '1.0.0' ],
+15 silly audit   fsevents: [ '2.3.3' ],
+15 silly audit   'get-caller-file': [ '2.0.5' ],
+15 silly audit   glob: [ '10.5.0', '7.1.7' ],
+15 silly audit   'graceful-fs': [ '4.2.11' ],
+15 silly audit   hardhat: [ '3.12.0' ],
+15 silly audit   ws: [ '8.21.2', '8.21.0' ],
+15 silly audit   'hash.js': [ '1.1.7' ],
+15 silly audit   he: [ '1.2.0' ],
+15 silly audit   'hmac-drbg': [ '1.0.1' ],
+15 silly audit   immer: [ '11.1.15' ],
+15 silly audit   inflight: [ '1.0.6' ],
+15 silly audit   inherits: [ '2.0.4' ],
+15 silly audit   'is-fullwidth-code-point': [ '3.0.0' ],
+15 silly audit   'is-path-inside': [ '3.0.3' ],
+15 silly audit   'is-plain-obj': [ '2.1.0' ],
+15 silly audit   'is-safe-filename': [ '0.1.1' ],
+15 silly audit   'is-unicode-supported': [ '0.1.0' ],
+15 silly audit   isexe: [ '2.0.0' ],
+15 silly audit   jackspeak: [ '3.4.3' ],
+15 silly audit   'js-sha3': [ '0.8.0' ],
+15 silly audit   'js-yaml': [ '4.3.1' ],
+15 silly audit   'json-stream-stringify': [ '3.1.7' ],
+15 silly audit   'json-stringify-safe': [ '5.0.1' ],
+15 silly audit   json5: [ '2.2.3' ],
+15 silly audit   jsonfile: [ '4.0.0' ],
+15 silly audit   kleur: [ '3.0.3' ],
+15 silly audit   'locate-path': [ '6.0.0' ],
+15 silly audit   lodash: [ '4.18.1' ],
+15 silly audit   'lodash-es': [ '4.18.1' ],
+15 silly audit   'lodash.camelcase': [ '4.3.0' ],
+15 silly audit   'log-symbols': [ '4.1.0' ],
+15 silly audit   'lru-cache': [ '10.4.3' ],
+15 silly audit   'micro-eth-signer': [ '0.14.0' ],
+15 silly audit   'micro-packed': [ '0.7.3' ],
+15 silly audit   'minimalistic-assert': [ '1.0.1' ],
+15 silly audit   'minimalistic-crypto-utils': [ '1.0.1' ],
+15 silly audit   minimatch: [ '9.0.9', '3.1.5' ],
+15 silly audit   minimist: [ '1.2.8' ],
+15 silly audit   minipass: [ '7.1.3' ],
+15 silly audit   mkdirp: [ '1.0.4' ],
+15 silly audit   mocha: [ '11.8.0' ],
+15 silly audit   readdirp: [ '4.1.2', '5.1.1' ],
+15 silly audit   ms: [ '2.1.3' ],
+15 silly audit   ndjson: [ '2.0.0' ],
+15 silly audit   once: [ '1.4.0' ],
+15 silly audit   'p-limit': [ '3.1.0' ],
+15 silly audit   'p-locate': [ '5.0.0' ],
+15 silly audit   'p-map': [ '7.0.6' ],
+15 silly audit   'package-json-from-dist': [ '1.0.1' ],
+15 silly audit   'path-exists': [ '4.0.0' ],
+15 silly audit   'path-is-absolute': [ '1.0.1' ],
+15 silly audit   'path-key': [ '3.1.1' ],
+15 silly audit   'path-scurry': [ '1.11.1' ],
+15 silly audit   picocolors: [ '1.1.1' ],
+15 silly audit   prettier: [ '2.8.8' ],
+15 silly audit   prompts: [ '2.4.2' ],
+15 silly audit   randombytes: [ '2.1.0' ],
+15 silly audit   'readable-stream': [ '3.6.2' ],
+15 silly audit   'reduce-flatten': [ '2.0.0' ],
+15 silly audit   'require-directory': [ '2.1.1' ],
+15 silly audit   'resolve.exports': [ '2.0.3' ],
+15 silly audit   rfdc: [ '1.4.1' ],
+15 silly audit   'safe-buffer': [ '5.2.1' ],
+15 silly audit   semver: [ '7.8.5' ],
+15 silly audit   'serialize-javascript': [ '6.0.2' ],
+15 silly audit   'shebang-command': [ '2.0.0' ],
+15 silly audit   'shebang-regex': [ '3.0.0' ],
+15 silly audit   'signal-exit': [ '4.1.0' ],
+15 silly audit   sisteransi: [ '1.0.5' ],
+15 silly audit   split2: [ '3.2.2' ],
+15 silly audit   string_decoder: [ '1.3.0' ],
+15 silly audit   'string-format': [ '2.0.0' ],
+15 silly audit   'strip-json-comments': [ '3.1.1' ],
+15 silly audit   'table-layout': [ '1.0.2' ],
+15 silly audit   through2: [ '4.0.2' ],
+15 silly audit   'ts-command-line-args': [ '2.5.1' ],
+15 silly audit   'ts-essentials': [ '7.0.3' ],
+15 silly audit   tslib: [ '2.7.0' ],
+15 silly audit   tsx: [ '4.23.9' ],
+15 silly audit   typechain: [ '8.3.2' ],
+15 silly audit   typescript: [ '5.9.3' ],
+15 silly audit   undici: [ '6.28.0' ],
+15 silly audit   'undici-types': [ '6.19.8' ],
+15 silly audit   universalify: [ '0.1.2' ],
+15 silly audit   'util-deprecate': [ '1.0.2' ],
+15 silly audit   which: [ '2.0.2' ],
+15 silly audit   wordwrapjs: [ '4.0.1' ],
+15 silly audit   workerpool: [ '9.3.4' ],
+15 silly audit   wrappy: [ '1.0.2' ],
+15 silly audit   y18n: [ '5.0.8' ],
+15 silly audit   yargs: [ '17.7.3' ],
+15 silly audit   'yargs-parser': [ '21.1.1' ],
+15 silly audit   'yargs-unparser': [ '2.0.0' ],
+15 silly audit   'yocto-queue': [ '0.1.0' ],
+15 silly audit   zod: [ '3.25.76' ]
+15 silly audit }
+16 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 511ms
+17 silly audit report {
+17 silly audit report   diff: [
+17 silly audit report     {
+17 silly audit report       id: 1112706,
+17 silly audit report       url: 'https://github.com/advisories/GHSA-73rr-hh4g-fpgx',
+17 silly audit report       title: 'jsdiff has a Denial of Service vulnerability in parsePatch and applyPatch',
+17 silly audit report       severity: 'low',
+17 silly audit report       vulnerable_versions: '>=6.0.0 <8.0.3',
+17 silly audit report       cwe: [Array],
+17 silly audit report       cvss: [Object]
+17 silly audit report     }
+17 silly audit report   ],
+17 silly audit report   elliptic: [
+17 silly audit report     {
+17 silly audit report       id: 1112030,
+17 silly audit report       url: 'https://github.com/advisories/GHSA-848j-6mx2-7j84',
+17 silly audit report       title: 'Elliptic Uses a Cryptographic Primitive with a Risky Implementation',
+17 silly audit report       severity: 'low',
+17 silly audit report       vulnerable_versions: '<=6.6.1',
+17 silly audit report       cwe: [Array],
+17 silly audit report       cvss: [Object]
+17 silly audit report     }
+17 silly audit report   ],
+17 silly audit report   'serialize-javascript': [
+17 silly audit report     {
+17 silly audit report       id: 1119440,
+17 silly audit report       url: 'https://github.com/advisories/GHSA-qj8w-gfj5-8c6v',
+17 silly audit report       title: 'Serialize JavaScript has CPU Exhaustion Denial of Service via crafted array-like objects',
+17 silly audit report       severity: 'moderate',
+17 silly audit report       vulnerable_versions: '>=5.0.0 <7.0.5',
+17 silly audit report       cwe: [Array],
+17 silly audit report       cvss: [Object]
+17 silly audit report     },
+17 silly audit report     {
+17 silly audit report       id: 1113686,
+17 silly audit report       url: 'https://github.com/advisories/GHSA-5c6j-r48x-rmvq',
+17 silly audit report       title: 'Serialize JavaScript is Vulnerable to RCE via RegExp.flags and Date.prototype.toISOString()',
+17 silly audit report       severity: 'high',
+17 silly audit report       vulnerable_versions: '<=7.0.2',
+17 silly audit report       cwe: [Array],
+17 silly audit report       cvss: [Object]
+17 silly audit report     }
+17 silly audit report   ]
+17 silly audit report }
+18 silly packumentCache corgi:https://registry.npmjs.org/diff cache-miss
+19 silly packumentCache corgi:https://registry.npmjs.org/elliptic cache-miss
+20 silly packumentCache corgi:https://registry.npmjs.org/serialize-javascript cache-miss
+21 http cache https://registry.npmjs.org/serialize-javascript 7ms (cache hit)
+22 silly packumentCache corgi:https://registry.npmjs.org/serialize-javascript set size:37694 disposed:false
+23 http cache https://registry.npmjs.org/elliptic 7ms (cache hit)
+24 silly packumentCache corgi:https://registry.npmjs.org/elliptic set size:67039 disposed:false
+25 http cache https://registry.npmjs.org/diff 9ms (cache hit)
+26 silly packumentCache corgi:https://registry.npmjs.org/diff set size:67741 disposed:false
+27 silly packumentCache corgi:https://registry.npmjs.org/mocha cache-miss
+28 http cache https://registry.npmjs.org/mocha 2ms (cache hit)
+29 silly packumentCache corgi:https://registry.npmjs.org/mocha set size:468656 disposed:false
+30 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2fsigning-key cache-miss
+31 http cache https://registry.npmjs.org/@ethersproject%2fsigning-key 1ms (cache hit)
+32 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2fsigning-key set size:74077 disposed:false
+33 silly packumentCache corgi:https://registry.npmjs.org/@nomicfoundation%2fhardhat-mocha cache-miss
+34 silly packumentCache corgi:https://registry.npmjs.org/@nomicfoundation%2fhardhat-toolbox-mocha-ethers cache-miss
+35 http cache https://registry.npmjs.org/@nomicfoundation%2fhardhat-mocha 1ms (cache hit)
+36 silly packumentCache corgi:https://registry.npmjs.org/@nomicfoundation%2fhardhat-mocha set size:74030 disposed:false
+37 http cache https://registry.npmjs.org/@nomicfoundation%2fhardhat-toolbox-mocha-ethers 2ms (cache hit)
+38 silly packumentCache corgi:https://registry.npmjs.org/@nomicfoundation%2fhardhat-toolbox-mocha-ethers set size:86494 disposed:false
+39 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2ftransactions cache-miss
+40 http cache https://registry.npmjs.org/@ethersproject%2ftransactions 2ms (cache hit)
+41 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2ftransactions set size:85329 disposed:false
+42 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2fabstract-provider cache-miss
+43 http cache https://registry.npmjs.org/@ethersproject%2fabstract-provider 3ms (cache hit)
+44 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2fabstract-provider set size:86707 disposed:false
+45 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2fabstract-signer cache-miss
+46 http cache https://registry.npmjs.org/@ethersproject%2fabstract-signer 2ms (cache hit)
+47 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2fabstract-signer set size:92575 disposed:false
+48 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2fhash cache-miss
+49 http cache https://registry.npmjs.org/@ethersproject%2fhash 1ms (cache hit)
+50 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2fhash set size:81868 disposed:false
+51 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2fabi cache-miss
+52 http cache https://registry.npmjs.org/@ethersproject%2fabi 2ms (cache hit)
+53 silly packumentCache corgi:https://registry.npmjs.org/@ethersproject%2fabi set size:136312 disposed:false
+54 silly packumentCache corgi:https://registry.npmjs.org/@nomicfoundation%2fhardhat-verify cache-miss
+55 http cache https://registry.npmjs.org/@nomicfoundation%2fhardhat-verify 1ms (cache hit)
+56 silly packumentCache corgi:https://registry.npmjs.org/@nomicfoundation%2fhardhat-verify set size:104266 disposed:false
+57 silly packumentCache corgi:https://registry.npmjs.org/@nomicfoundation%2fhardhat-ignition cache-miss
+58 silly packumentCache corgi:https://registry.npmjs.org/@nomicfoundation%2fhardhat-ignition-ethers cache-miss
+59 http cache https://registry.npmjs.org/@nomicfoundation%2fhardhat-ignition 2ms (cache hit)
+60 silly packumentCache corgi:https://registry.npmjs.org/@nomicfoundation%2fhardhat-ignition set size:140300 disposed:false
+61 http cache https://registry.npmjs.org/@nomicfoundation%2fhardhat-ignition-ethers 2ms (cache hit)
+62 silly packumentCache corgi:https://registry.npmjs.org/@nomicfoundation%2fhardhat-ignition-ethers set size:111103 disposed:false
+63 verbose cwd /Users/vimukthideshan/Final Project/canela-ceylon-scm/blockchain
+64 verbose os Darwin 25.5.0
+65 verbose node v23.1.0
+66 verbose npm  v11.4.2
+67 verbose exit 0
+68 info ok

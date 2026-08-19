@@ -1,0 +1,50 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-a7e75ffb4a2cb417324d3a28ccdd1fd81180a60f",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "compilerType": "solc",
+  "userSourceNameMap": {
+    "contracts/BatchRegistry.sol": "project/contracts/BatchRegistry.sol",
+    "contracts/BatchRegistryProxy.sol": "project/contracts/BatchRegistryProxy.sol",
+    "contracts/IBatchRegistry.sol": "project/contracts/IBatchRegistry.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode.linkReferences",
+            "evm.bytecode.object",
+            "evm.bytecode.opcodes",
+            "evm.bytecode.sourceMap",
+            "evm.deployedBytecode.immutableReferences",
+            "evm.deployedBytecode.linkReferences",
+            "evm.deployedBytecode.object",
+            "evm.deployedBytecode.opcodes",
+            "evm.deployedBytecode.sourceMap",
+            "evm.methodIdentifiers"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/BatchRegistry.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\nimport \"./IBatchRegistry.sol\";\n\ncontract BatchRegistry is IBatchRegistry {\n    mapping(string => BatchMetadata) private batches;\n    mapping(string => bool) private exists;\n\n    function registerBatch(\n        string calldata batchId,\n        string[] calldata sourceSupplierIds,\n        uint64 processingDate,\n        string calldata aiAssignedGrade,\n        string calldata exportDestination,\n        uint64 logisticsHandoverTimestamp\n    ) external override {\n        require(bytes(batchId).length > 0, \"batchId required\");\n        require(!exists[batchId], \"batch already exists\");\n\n        BatchMetadata memory record = BatchMetadata({\n            batchId: batchId,\n            sourceSupplierIds: sourceSupplierIds,\n            processingDate: processingDate,\n            aiAssignedGrade: aiAssignedGrade,\n            exportDestination: exportDestination,\n            logisticsHandoverTimestamp: logisticsHandoverTimestamp,\n            registeredAt: uint64(block.timestamp)\n        });\n\n        batches[batchId] = record;\n        exists[batchId] = true;\n\n        emit BatchRegistered(\n            batchId,\n            sourceSupplierIds,\n            aiAssignedGrade,\n            exportDestination,\n            logisticsHandoverTimestamp,\n            msg.sender\n        );\n    }\n\n    function getBatch(string calldata batchId) external view override returns (BatchMetadata memory) {\n        require(exists[batchId], \"batch not found\");\n        return batches[batchId];\n    }\n\n    function batchExists(string calldata batchId) external view override returns (bool) {\n        return exists[batchId];\n    }\n}\n"
+      },
+      "project/contracts/BatchRegistryProxy.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract BatchRegistryProxy {\n    bytes32 private constant IMPLEMENTATION_SLOT =\n        bytes32(uint256(keccak256(\"eip1967.proxy.implementation\")) - 1);\n    bytes32 private constant ADMIN_SLOT =\n        bytes32(uint256(keccak256(\"eip1967.proxy.admin\")) - 1);\n\n    constructor(address implementation_, address admin_, bytes memory initData) {\n        require(implementation_ != address(0), \"implementation required\");\n        require(admin_ != address(0), \"admin required\");\n        _setImplementation(implementation_);\n        _setAdmin(admin_);\n\n        if (initData.length > 0) {\n            (bool ok, bytes memory reason) = implementation_.delegatecall(initData);\n            require(ok, string(reason));\n        }\n    }\n\n    modifier onlyAdmin() {\n        require(msg.sender == _admin(), \"not admin\");\n        _;\n    }\n\n    function upgradeTo(address newImplementation) external onlyAdmin {\n        require(newImplementation != address(0), \"implementation required\");\n        _setImplementation(newImplementation);\n    }\n\n    function implementation() external view returns (address) {\n        return _implementation();\n    }\n\n    function admin() external view returns (address) {\n        return _admin();\n    }\n\n    fallback() external payable {\n        _delegate(_implementation());\n    }\n\n    receive() external payable {\n        _delegate(_implementation());\n    }\n\n    function _delegate(address impl) private {\n        assembly {\n            calldatacopy(0, 0, calldatasize())\n            let result := delegatecall(gas(), impl, 0, calldatasize(), 0, 0)\n            returndatacopy(0, 0, returndatasize())\n\n            switch result\n            case 0 {\n                revert(0, returndatasize())\n            }\n            default {\n                return(0, returndatasize())\n            }\n        }\n    }\n\n    function _implementation() private view returns (address impl) {\n        bytes32 slot = IMPLEMENTATION_SLOT;\n        assembly {\n            impl := sload(slot)\n        }\n    }\n\n    function _setImplementation(address impl) private {\n        bytes32 slot = IMPLEMENTATION_SLOT;\n        assembly {\n            sstore(slot, impl)\n        }\n    }\n\n    function _admin() private view returns (address adm) {\n        bytes32 slot = ADMIN_SLOT;\n        assembly {\n            adm := sload(slot)\n        }\n    }\n\n    function _setAdmin(address adm) private {\n        bytes32 slot = ADMIN_SLOT;\n        assembly {\n            sstore(slot, adm)\n        }\n    }\n}\n"
+      },
+      "project/contracts/IBatchRegistry.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ninterface IBatchRegistry {\n    struct BatchMetadata {\n        string batchId;\n        string[] sourceSupplierIds;\n        uint64 processingDate;\n        string aiAssignedGrade;\n        string exportDestination;\n        uint64 logisticsHandoverTimestamp;\n        uint64 registeredAt;\n    }\n\n    event BatchRegistered(\n        string indexed batchId,\n        string[] sourceSupplierIds,\n        string aiAssignedGrade,\n        string exportDestination,\n        uint64 logisticsHandoverTimestamp,\n        address indexed registrar\n    );\n\n    function registerBatch(\n        string calldata batchId,\n        string[] calldata sourceSupplierIds,\n        uint64 processingDate,\n        string calldata aiAssignedGrade,\n        string calldata exportDestination,\n        uint64 logisticsHandoverTimestamp\n    ) external;\n\n    function getBatch(string calldata batchId) external view returns (BatchMetadata memory);\n\n    function batchExists(string calldata batchId) external view returns (bool);\n}\n"
+      }
+    }
+  }
+}

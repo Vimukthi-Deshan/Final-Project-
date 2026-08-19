@@ -1,0 +1,53 @@
+record_id,diameter_mm,colour_value,colour_score,texture_value,texture_score,grade_label,grade_display
+CC-GR-0020,10.7,deep_yellow_golden_brown,2,immaculate,1,c5_ex_sp,C5 Extra Special
+CC-GR-0042,15.0,deep_yellow_golden_brown,2,very_clean_under_15_percent_spots,2,c5,C5
+CC-GR-0048,18.0,deep_yellow_golden_brown,2,very_clean_under_15_percent_spots,2,c4,C4
+CC-GR-0013,11.6,pale_golden_tan,1,very_clean_under_15_percent_spots,2,c5_ex_sp,C5 Extra Special
+CC-GR-0044,17.2,rough_dark_brown,4,very_clean_under_15_percent_spots,2,c4,C4
+CC-GR-0006,6.9,pale_golden_tan,1,immaculate,1,alba,Alba
+CC-GR-0018,10.5,pale_golden_tan,1,very_clean_under_15_percent_spots,2,c5_ex_sp,C5 Extra Special
+CC-GR-0051,16.4,medium_brown_with_patches,3,moderately_patchy_40_to_60_percent,3,c4,C4
+CC-GR-0004,8.4,pale_golden_tan,1,immaculate,1,alba,Alba
+CC-GR-0033,15.5,medium_brown_with_patches,3,very_clean_under_15_percent_spots,2,c5,C5
+CC-GR-0014,10.1,pale_golden_tan,1,immaculate,1,c5_ex_sp,C5 Extra Special
+CC-GR-0009,7.6,pale_golden_tan,1,immaculate,1,alba,Alba
+CC-GR-0027,13.2,deep_yellow_golden_brown,2,very_clean_under_15_percent_spots,2,c5_sp,C5 Special
+CC-GR-0007,6.3,pale_golden_tan,1,immaculate,1,alba,Alba
+CC-GR-0035,14.6,deep_yellow_golden_brown,2,very_clean_under_15_percent_spots,2,c5,C5
+CC-GR-0005,6.9,pale_golden_tan,1,immaculate,1,alba,Alba
+CC-GR-0038,14.9,pale_golden_tan,1,very_clean_under_15_percent_spots,2,c5,C5
+CC-GR-0025,13.5,medium_brown_with_patches,3,very_clean_under_15_percent_spots,2,c5_sp,C5 Special
+CC-GR-0045,17.7,deep_yellow_golden_brown,2,moderately_patchy_40_to_60_percent,3,c4,C4
+CC-GR-0034,15.2,medium_brown_with_patches,3,moderately_patchy_40_to_60_percent,3,c5,C5
+CC-GR-0050,16.7,medium_brown_with_patches,3,very_clean_under_15_percent_spots,2,c4,C4
+CC-GR-0016,11.1,pale_golden_tan,1,immaculate,1,c5_ex_sp,C5 Extra Special
+CC-GR-0010,5.8,pale_golden_tan,1,immaculate,1,alba,Alba
+CC-GR-0017,10.0,deep_yellow_golden_brown,2,immaculate,1,c5_ex_sp,C5 Extra Special
+CC-GR-0031,13.9,pale_golden_tan,1,immaculate,1,c5_sp,C5 Special
+CC-GR-0037,15.0,deep_yellow_golden_brown,2,very_clean_under_15_percent_spots,2,c5,C5
+CC-GR-0026,13.8,pale_golden_tan,1,very_clean_under_15_percent_spots,2,c5_sp,C5 Special
+CC-GR-0012,7.1,pale_golden_tan,1,immaculate,1,alba,Alba
+CC-GR-0001,8.1,pale_golden_tan,1,immaculate,1,alba,Alba
+CC-GR-0047,17.4,deep_yellow_golden_brown,2,rough_heavily_discoloured,4,c4,C4
+CC-GR-0028,13.9,deep_yellow_golden_brown,2,very_clean_under_15_percent_spots,2,c5_sp,C5 Special
+CC-GR-0032,12.7,pale_golden_tan,1,immaculate,1,c5_sp,C5 Special
+CC-GR-0040,15.2,deep_yellow_golden_brown,2,rough_heavily_discoloured,4,c5,C5
+CC-GR-0030,12.8,medium_brown_with_patches,3,immaculate,1,c5_sp,C5 Special
+CC-GR-0046,17.5,medium_brown_with_patches,3,moderately_patchy_40_to_60_percent,3,c4,C4
+CC-GR-0002,7.3,pale_golden_tan,1,immaculate,1,alba,Alba
+CC-GR-0022,11.7,pale_golden_tan,1,immaculate,1,c5_ex_sp,C5 Extra Special
+CC-GR-0003,9.4,pale_golden_tan,1,moderately_patchy_40_to_60_percent,3,alba,Alba
+CC-GR-0041,14.0,deep_yellow_golden_brown,2,immaculate,1,c5,C5
+CC-GR-0036,14.8,medium_brown_with_patches,3,moderately_patchy_40_to_60_percent,3,c5,C5
+CC-GR-0024,13.6,pale_golden_tan,1,very_clean_under_15_percent_spots,2,c5_sp,C5 Special
+CC-GR-0049,17.1,medium_brown_with_patches,3,immaculate,1,c4,C4
+CC-GR-0011,6.8,pale_golden_tan,1,immaculate,1,alba,Alba
+CC-GR-0023,13.2,pale_golden_tan,1,immaculate,1,c5_sp,C5 Special
+CC-GR-0019,11.2,pale_golden_tan,1,rough_heavily_discoloured,4,c5_ex_sp,C5 Extra Special
+CC-GR-0052,17.3,rough_dark_brown,4,very_clean_under_15_percent_spots,2,c4,C4
+CC-GR-0021,11.7,deep_yellow_golden_brown,2,immaculate,1,c5_ex_sp,C5 Extra Special
+CC-GR-0008,7.9,pale_golden_tan,1,very_clean_under_15_percent_spots,2,alba,Alba
+CC-GR-0043,16.9,deep_yellow_golden_brown,2,moderately_patchy_40_to_60_percent,3,c4,C4
+CC-GR-0015,11.5,pale_golden_tan,1,immaculate,1,c5_ex_sp,C5 Extra Special
+CC-GR-0029,13.1,pale_golden_tan,1,very_clean_under_15_percent_spots,2,c5_sp,C5 Special
+CC-GR-0039,14.9,deep_yellow_golden_brown,2,moderately_patchy_40_to_60_percent,3,c5,C5

@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 from typing import Iterable, List
+
+from .common import lightweight_lstm_forecast
 
 
 def forecast_lstm(series: Iterable[float], horizon: int) -> List[float]:
-    values = list(series)
-    if not values:
-        return [0.0] * horizon
-    return [values[-1]] * horizon
+    return lightweight_lstm_forecast(series, horizon)
