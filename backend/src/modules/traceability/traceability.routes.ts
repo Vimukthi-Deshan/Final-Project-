@@ -1,13 +1,22 @@
 import { Router } from "express";
+import { keccak256, toUtf8Bytes } from "ethers";
 import { z } from "zod";
 
 import { fail, ok } from "../../middleware/response-envelope";
-import { getBatchById } from "../batches/batches.store";
+import { getBatchById, listBatches } from "../batches/batches.store";
+import {
+  getSupplierByName,
+  updateSupplierBlockchainRef,
+} from "../suppliers/suppliers.store";
 import { upsertTraceabilityRecord } from "./traceability.store";
 import { TraceabilityService } from "./traceability.service";
 import { RecordSupplierInput } from "./traceability.types";
 
 const router = Router();
+
+function normalizeId(value: string): string {
+  return value.trim();
+}
 
 const recordSupplierSchema = z.object({
   dataHash: z
@@ -19,8 +28,19 @@ const recordSupplierSchema = z.object({
   productCount: z.number().int().nonnegative(),
 });
 
+const autoRecordSupplierSchema = z.object({
+  productCount: z.number().int().nonnegative(),
+});
+
+function buildExplorerUrl(txHash: string): string {
+  const explorerBase =
+    process.env.SEPOLIA_EXPLORER_BASE_URL ?? "https://sepolia.etherscan.io/tx";
+  return `${explorerBase}/${txHash}`;
+}
+
 router.post("/blockchain-registration/:mongoDbId", async (req, res) => {
   try {
+    const mongoDbId = normalizeId(req.params.mongoDbId);
     const parsed = recordSupplierSchema.safeParse(req.body);
     if (!parsed.success) {
       res.status(400).json(
@@ -37,7 +57,7 @@ router.post("/blockchain-registration/:mongoDbId", async (req, res) => {
 
     const payload = parsed.data as Omit<RecordSupplierInput, "mongoDbId">;
     const input: RecordSupplierInput = {
-      mongoDbId: req.params.mongoDbId,
+      mongoDbId,
       dataHash: payload.dataHash,
       productCount: payload.productCount,
     };
@@ -57,6 +77,16 @@ router.post("/blockchain-registration/:mongoDbId", async (req, res) => {
       blockNumber: result.blockNumber,
     });
 
+    await updateSupplierBlockchainRef(input.mongoDbId, {
+      txId: result.txHash,
+      network: result.network,
+      chainId: result.chainId,
+      contractAddress: result.contractAddress,
+      hash: input.dataHash,
+      explorerUrl: buildExplorerUrl(result.txHash),
+      recordedAt: new Date().toISOString(),
+    });
+
     res.status(200).json(ok(result));
   } catch (error) {
     const message =
@@ -65,12 +95,117 @@ router.post("/blockchain-registration/:mongoDbId", async (req, res) => {
   }
 });
 
+router.post(
+  "/blockchain-registration/:mongoDbId/auto-record",
+  async (req, res) => {
+    try {
+      const mongoDbId = normalizeId(req.params.mongoDbId);
+      const parsed = autoRecordSupplierSchema.safeParse(req.body);
+      if (!parsed.success) {
+        res.status(400).json(
+          fail("INVALID_AUTO_RECORD_PAYLOAD", "Payload validation failed", {
+            issues: parsed.error.issues,
+          }),
+        );
+        return;
+      }
+
+      const supplier = await getSupplierByName(mongoDbId);
+      if (!supplier) {
+        res
+          .status(404)
+          .json(fail("SUPPLIER_NOT_FOUND", `Supplier ${mongoDbId} not found.`));
+        return;
+      }
+
+      const canonicalPayload = {
+        supplierName: supplier.supplierName.trim(),
+        contactPerson: supplier.contactPerson,
+        email: supplier.email,
+        phone: supplier.phone,
+        address: supplier.address,
+        city: supplier.city,
+        country: supplier.country,
+      };
+
+      const dataHash = keccak256(toUtf8Bytes(JSON.stringify(canonicalPayload)));
+
+      const input: RecordSupplierInput = {
+        mongoDbId,
+        dataHash,
+        productCount: parsed.data.productCount,
+      };
+
+      const service = new TraceabilityService();
+      let result: {
+        txHash: string;
+        contractAddress: string;
+        network: string;
+        chainId: number;
+        blockNumber: number;
+      } | null = null;
+      let alreadyRecorded = false;
+
+      try {
+        await service.verifySupplier(mongoDbId);
+        alreadyRecorded = true;
+      } catch {
+        alreadyRecorded = false;
+      }
+
+      if (!alreadyRecorded) {
+        result = await service.recordSupplier(input);
+
+        await upsertTraceabilityRecord(input.mongoDbId, {
+          dataHash: input.dataHash,
+          productCount: input.productCount,
+          verifiedOnChain: false,
+          lastAction: "record",
+          txHash: result.txHash,
+          network: result.network,
+          chainId: result.chainId,
+          contractAddress: result.contractAddress,
+          blockNumber: result.blockNumber,
+        });
+
+        await updateSupplierBlockchainRef(input.mongoDbId, {
+          txId: result.txHash,
+          network: result.network,
+          chainId: result.chainId,
+          contractAddress: result.contractAddress,
+          hash: input.dataHash,
+          explorerUrl: buildExplorerUrl(result.txHash),
+          recordedAt: new Date().toISOString(),
+        });
+      }
+
+      const state = await service.verifySupplier(mongoDbId);
+
+      res.status(200).json(
+        ok({
+          ...(result ?? {}),
+          dataHash,
+          mongoDbId,
+          source: "supplier_profile",
+          alreadyRecorded,
+          onChainState: state,
+        }),
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unknown auto-record error";
+      res.status(400).json(fail("BLOCKCHAIN_AUTO_RECORD_FAILED", message));
+    }
+  },
+);
+
 router.post("/blockchain-registration/:mongoDbId/verify", async (req, res) => {
   try {
+    const mongoDbId = normalizeId(req.params.mongoDbId);
     const service = new TraceabilityService();
-    const result = await service.markSupplierVerified(req.params.mongoDbId);
+    const result = await service.markSupplierVerified(mongoDbId);
 
-    await upsertTraceabilityRecord(req.params.mongoDbId, {
+    await upsertTraceabilityRecord(mongoDbId, {
       verifiedOnChain: true,
       lastAction: "verify",
       txHash: result.txHash,
@@ -78,6 +213,17 @@ router.post("/blockchain-registration/:mongoDbId/verify", async (req, res) => {
       chainId: result.chainId,
       contractAddress: result.contractAddress,
       blockNumber: result.blockNumber,
+    });
+
+    const state = await service.verifySupplier(mongoDbId);
+    await updateSupplierBlockchainRef(mongoDbId, {
+      txId: result.txHash,
+      network: result.network,
+      chainId: result.chainId,
+      contractAddress: result.contractAddress,
+      hash: state.dataHash,
+      explorerUrl: buildExplorerUrl(result.txHash),
+      recordedAt: new Date().toISOString(),
     });
 
     res.status(200).json(ok(result));
@@ -94,6 +240,7 @@ router.patch(
   "/blockchain-registration/:mongoDbId/products",
   async (req, res) => {
     try {
+      const mongoDbId = normalizeId(req.params.mongoDbId);
       const productCount = Number(
         (req.body as { productCount?: number }).productCount,
       );
@@ -103,11 +250,11 @@ router.patch(
 
       const service = new TraceabilityService();
       const result = await service.updateSupplierProducts(
-        req.params.mongoDbId,
+        mongoDbId,
         productCount,
       );
 
-      await upsertTraceabilityRecord(req.params.mongoDbId, {
+      await upsertTraceabilityRecord(mongoDbId, {
         productCount,
         lastAction: "updateProducts",
         txHash: result.txHash,
@@ -115,6 +262,17 @@ router.patch(
         chainId: result.chainId,
         contractAddress: result.contractAddress,
         blockNumber: result.blockNumber,
+      });
+
+      const state = await service.verifySupplier(mongoDbId);
+      await updateSupplierBlockchainRef(mongoDbId, {
+        txId: result.txHash,
+        network: result.network,
+        chainId: result.chainId,
+        contractAddress: result.contractAddress,
+        hash: state.dataHash,
+        explorerUrl: buildExplorerUrl(result.txHash),
+        recordedAt: new Date().toISOString(),
       });
 
       res.status(200).json(ok(result));
@@ -128,10 +286,11 @@ router.patch(
 
 router.get("/verify/:mongoDbId", async (req, res) => {
   try {
+    const mongoDbId = normalizeId(req.params.mongoDbId);
     const service = new TraceabilityService();
-    const data = await service.verifySupplier(req.params.mongoDbId);
+    const data = await service.verifySupplier(mongoDbId);
 
-    await upsertTraceabilityRecord(req.params.mongoDbId, {
+    await upsertTraceabilityRecord(mongoDbId, {
       dataHash: data.dataHash,
       productCount: data.productCount,
       verifiedOnChain: data.isVerified,
@@ -150,9 +309,10 @@ router.get("/verify/:mongoDbId", async (req, res) => {
 
 router.get("/verify/:mongoDbId/hash/:dataHash", async (req, res) => {
   try {
+    const mongoDbId = normalizeId(req.params.mongoDbId);
     const service = new TraceabilityService();
     const valid = await service.verifySupplierHash(
-      req.params.mongoDbId,
+      mongoDbId,
       req.params.dataHash,
     );
     res.status(200).json(ok({ valid }));
@@ -165,15 +325,77 @@ router.get("/verify/:mongoDbId/hash/:dataHash", async (req, res) => {
   }
 });
 
+router.get("/traceability/suppliers/:mongoDbId/insights", async (req, res) => {
+  try {
+    const mongoDbId = normalizeId(req.params.mongoDbId);
+    const supplier = await getSupplierByName(mongoDbId);
+    if (!supplier) {
+      res
+        .status(404)
+        .json(fail("SUPPLIER_NOT_FOUND", `Supplier ${mongoDbId} not found.`));
+      return;
+    }
+
+    const batches = await listBatches();
+    const contributedBatches = batches
+      .map((batch) => {
+        const contribution = batch.sourceSuppliers.find(
+          (item) => item.supplierId.trim() === mongoDbId,
+        );
+        if (!contribution) {
+          return null;
+        }
+
+        return {
+          batchId: batch.batchId,
+          processingDate: batch.processingDate,
+          qualityGrade: batch.qualityGrade ?? null,
+          exportDestination: batch.exportDestination,
+          contributionKg: contribution.contributionKg,
+        };
+      })
+      .filter((item): item is NonNullable<typeof item> => item !== null);
+
+    const totalContributionKg = contributedBatches.reduce(
+      (sum, item) => sum + item.contributionKg,
+      0,
+    );
+
+    res.status(200).json(
+      ok({
+        supplier: {
+          supplierName: supplier.supplierName,
+          contactPerson: supplier.contactPerson,
+          city: supplier.city,
+          country: supplier.country,
+          certifications: supplier.certifications ?? [],
+          products: supplier.products ?? [],
+          blockchainRef: supplier.blockchainRef ?? null,
+        },
+        contribution: {
+          totalBatches: contributedBatches.length,
+          totalContributionKg,
+          batches: contributedBatches,
+        },
+      }),
+    );
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Unknown supplier insights read error";
+    res.status(400).json(fail("SUPPLIER_TRACEABILITY_INSIGHTS_FAILED", message));
+  }
+});
+
 router.get("/traceability/batches/:batchId/verify", async (req, res) => {
   try {
-    const batch = await getBatchById(req.params.batchId);
+    const batchId = normalizeId(req.params.batchId);
+    const batch = await getBatchById(batchId);
     if (!batch) {
       res
         .status(404)
-        .json(
-          fail("BATCH_NOT_FOUND", `Batch ${req.params.batchId} was not found.`),
-        );
+        .json(fail("BATCH_NOT_FOUND", `Batch ${batchId} was not found.`));
       return;
     }
 

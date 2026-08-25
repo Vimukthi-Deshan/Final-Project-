@@ -43,3 +43,28 @@ export async function saveSupplier(supplier: Supplier): Promise<Supplier> {
 
   return supplier;
 }
+
+export async function updateSupplierBlockchainRef(
+  supplierName: string,
+  blockchainRef: Supplier["blockchainRef"],
+): Promise<void> {
+  const collection = await getCollection<PersistedSupplier>("suppliers");
+  const now = new Date().toISOString();
+  const key = supplierName.toLowerCase();
+
+  const existing = await collection.findOne({ key });
+  if (!existing) {
+    return;
+  }
+
+  await collection.updateOne(
+    { key },
+    {
+      $set: {
+        "payload.blockchainRef": blockchainRef,
+        "payload.updatedAt": now,
+        updatedAt: now,
+      },
+    },
+  );
+}

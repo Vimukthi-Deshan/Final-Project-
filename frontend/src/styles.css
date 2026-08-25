@@ -347,6 +347,15 @@ button {
   stroke-width: 1;
 }
 
+.supplier-kv {
+  margin-top: 0.45rem;
+  margin-bottom: 0.7rem;
+}
+
+.supplier-kv span {
+  font-size: 0.9rem;
+}
+
 pre.metric {
   white-space: pre-wrap;
   overflow-wrap: anywhere;

@@ -46,13 +46,13 @@ export default function SuppliersPage() {
       setStatus(null);
 
       const payload: SupplierPayload = {
-        supplierName,
-        contactPerson,
-        email,
-        phone,
-        address,
-        city,
-        country,
+        supplierName: supplierName.trim(),
+        contactPerson: contactPerson.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        address: address.trim(),
+        city: city.trim(),
+        country: country.trim(),
         products: [],
         certifications: certification
           .split(",")
@@ -170,11 +170,61 @@ export default function SuppliersPage() {
         {suppliers.map((supplier) => (
           <article className="metric" key={supplier.supplierName}>
             <h3>{supplier.supplierName}</h3>
-            <p>Contact: {supplier.contactPerson}</p>
-            <p>
-              Location: {supplier.city}, {supplier.country}
-            </p>
-            <p>Email: {supplier.email}</p>
+            <div className="kv supplier-kv">
+              <span>Contact</span>
+              <span>{supplier.contactPerson}</span>
+              <span>Email</span>
+              <span>{supplier.email}</span>
+              <span>Phone</span>
+              <span>{supplier.phone}</span>
+              <span>Address</span>
+              <span>{supplier.address}</span>
+              <span>Location</span>
+              <span>
+                {supplier.city}, {supplier.country}
+              </span>
+              <span>Created At</span>
+              <span>{supplier.createdAt ?? "N/A"}</span>
+              <span>Updated At</span>
+              <span>{supplier.updatedAt ?? "N/A"}</span>
+            </div>
+
+            <h4>Blockchain</h4>
+            {supplier.blockchainRef ? (
+              <div className="kv supplier-kv">
+                <span>Network</span>
+                <span>{supplier.blockchainRef.network ?? "N/A"}</span>
+                <span>Chain ID</span>
+                <span>{supplier.blockchainRef.chainId ?? "N/A"}</span>
+                <span>Tx Hash</span>
+                <span className="mono-text">
+                  {supplier.blockchainRef.txId ?? "N/A"}
+                </span>
+                <span>Contract</span>
+                <span className="mono-text">
+                  {supplier.blockchainRef.contractAddress ?? "N/A"}
+                </span>
+                <span>Data Hash</span>
+                <span className="mono-text">
+                  {supplier.blockchainRef.hash ?? "N/A"}
+                </span>
+                <span>Explorer</span>
+                {supplier.blockchainRef.explorerUrl ? (
+                  <a
+                    className="link-inline"
+                    href={supplier.blockchainRef.explorerUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open transaction
+                  </a>
+                ) : (
+                  <span>N/A</span>
+                )}
+              </div>
+            ) : (
+              <p className="help-text">Not recorded on-chain yet.</p>
+            )}
           </article>
         ))}
       </div>

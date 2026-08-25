@@ -259,6 +259,20 @@ export async function recordSupplierOnChain(
   });
 }
 
+export async function autoRecordSupplierOnChain(
+  mongoDbId: string,
+  productCount: number,
+) {
+  const id = encodeURIComponent(mongoDbId.trim());
+  return request<Record<string, unknown>>(
+    `/blockchain-registration/${id}/auto-record`,
+    {
+      method: "POST",
+      body: JSON.stringify({ productCount }),
+    },
+  );
+}
+
 export async function markSupplierVerifiedOnChain(mongoDbId: string) {
   const id = encodeURIComponent(mongoDbId.trim());
   return request<Record<string, unknown>>(
@@ -295,6 +309,52 @@ export async function verifySupplierHashOnChain(
   const id = encodeURIComponent(mongoDbId.trim());
   const hash = encodeURIComponent(dataHash.trim());
   return request<{ valid: boolean }>(`/verify/${id}/hash/${hash}`);
+}
+
+export interface SupplierTraceabilityInsights {
+  supplier: {
+    supplierName: string;
+    contactPerson: string;
+    city: string;
+    country: string;
+    certifications: string[];
+    products: Array<{
+      productName: string;
+      productDescription?: string;
+      quantity: number;
+      quantityUnit?: string;
+      price: number;
+      currency?: string;
+      grade?: string;
+    }>;
+    blockchainRef: {
+      txId?: string;
+      network?: string;
+      chainId?: number;
+      contractAddress?: string;
+      hash?: string;
+      explorerUrl?: string;
+      recordedAt?: string;
+    } | null;
+  };
+  contribution: {
+    totalBatches: number;
+    totalContributionKg: number;
+    batches: Array<{
+      batchId: string;
+      processingDate: string;
+      qualityGrade: "Alba" | "C5" | "C4" | "Mexico" | "Hamburg" | null;
+      exportDestination: string;
+      contributionKg: number;
+    }>;
+  };
+}
+
+export async function getSupplierTraceabilityInsights(mongoDbId: string) {
+  const id = encodeURIComponent(mongoDbId.trim());
+  return request<SupplierTraceabilityInsights>(
+    `/traceability/suppliers/${id}/insights`,
+  );
 }
 
 export interface BatchHybridVerificationResponse {
