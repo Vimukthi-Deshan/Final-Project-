@@ -101,3 +101,53 @@ export interface Batch {
   qrValue?: string;
   qrCodeDataUrl?: string;
 }
+
+export interface InvoiceParty {
+  name: string;
+  address: string;
+  contact: string;
+  email: string;
+  taxId?: string;
+}
+
+export interface InvoiceItem {
+  productName: string;
+  quantity: number;
+  price: number;
+  lineTotal: number;
+  hsCode?: string;
+  quantityUnit?: string;
+  netWeight?: number;
+  grossWeight?: number;
+  grade?: string;
+  batchId?: string;
+}
+
+export interface InvoicePaymentTerms {
+  term: string;
+  notes?: string;
+}
+
+export interface ProformaInvoice {
+  documentId: string;
+  batchId: string;
+  type: "PROFORMA" | "COMMERCIAL";
+  date: string;
+  dueDate?: string;
+  currency: string;
+  seller: InvoiceParty;
+  buyer: InvoiceParty;
+  items: InvoiceItem[];
+  total: number;
+  paymentStatus: "unpaid" | "paid" | "pending" | "failed";
+  incoterm?: string;
+  incotermNamedPlace?: string;
+  portOfLoading?: string;
+  portOfDischarge?: string;
+  paymentTerms?: InvoicePaymentTerms;
+  amountInWords?: string;
+  countryOfOrigin?: string;
+  blockchainRef?: SupplierBlockchainRef;
+  createdAt: string;
+  updatedAt: string;
+}

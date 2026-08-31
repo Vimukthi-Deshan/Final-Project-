@@ -1,0 +1,105 @@
+
+erDiagram
+  SUPPLIERS {
+    string key
+    string supplierName
+    string contactPerson
+    string email
+    string city
+    string country
+    string blockchainRef_txId
+    string blockchainRef_hash
+    string createdAt
+    string updatedAt
+  }
+
+  BATCHES {
+    string key
+    string batchId
+    string processingDate
+    string qualityGrade
+    string exportDestination
+    string logisticsHandoverAt
+    string verifyUrl
+    string qrValue
+  }
+
+  BATCH_SUPPLIER_CONTRIBUTIONS {
+    string batchId
+    string supplierId
+    float contributionKg
+  }
+
+  TRACEABILITY_RECORDS {
+    string mongoDbId
+    string dataHash
+    int productCount
+    boolean verifiedOnChain
+    string txHash
+    string network
+    int chainId
+    string contractAddress
+    int blockNumber
+    int recordedAt
+    int verificationTimestamp
+    string updatedAt
+  }
+
+  FORECASTING_DAILY_ROWS {
+    string key
+    string date
+    int paidOrderCount
+    float paidRevenue
+    string sources
+  }
+
+  FORECASTING_INGESTIONS {
+    string key
+    string ingestionId
+    string sourceFiles
+    int dailyRows
+    string mergedTarget
+    string createdAt
+  }
+
+  INVOICES {
+    string documentId
+    string batchId
+    string type
+    string date
+    string dueDate
+    string currency
+    float total
+    string paymentStatus
+    string incoterm
+    string portOfLoading
+    string portOfDischarge
+    string countryOfOrigin
+    string createdAt
+  }
+
+  INVOICE_ITEMS {
+    string productName
+    float quantity
+    float price
+    float lineTotal
+    string hsCode
+    string quantityUnit
+    string grade
+  }
+
+  INVOICE_PARTY {
+    string name
+    string address
+    string contact
+    string email
+    string taxId
+  }
+
+  SUPPLIERS ||--o{ BATCH_SUPPLIER_CONTRIBUTIONS : contributes_to
+  BATCHES ||--o{ BATCH_SUPPLIER_CONTRIBUTIONS : has
+  SUPPLIERS ||--o| TRACEABILITY_RECORDS : anchored_by_mongoDbId
+  BATCHES ||--o{ INVOICES : referenced_in
+  INVOICES ||--|{ INVOICE_ITEMS : contains
+  INVOICES ||--|| INVOICE_PARTY : seller
+  INVOICES ||--|| INVOICE_PARTY : buyer

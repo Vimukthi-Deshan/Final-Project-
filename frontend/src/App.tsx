@@ -2,6 +2,7 @@ import { NavLink, Route, Routes } from "react-router-dom";
 
 import BatchesPage from "./pages/batches";
 import DashboardPage from "./pages/dashboard";
+import ExportDocsPage from "./pages/export-docs";
 import ForecastingPage from "./pages/forecasting";
 import GradingPage from "./pages/grading";
 import SuppliersPage from "./pages/suppliers";
@@ -12,6 +13,7 @@ const navItems = [
   { to: "/", label: "Dashboard" },
   { to: "/suppliers", label: "Suppliers" },
   { to: "/batches", label: "Batches" },
+  { to: "/export-docs", label: "Invoices" },
   { to: "/grading", label: "Grading" },
   { to: "/forecasting", label: "Forecasting" },
   { to: "/traceability", label: "Traceability" },
@@ -47,6 +49,7 @@ export default function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/suppliers" element={<SuppliersPage />} />
           <Route path="/batches" element={<BatchesPage />} />
+          <Route path="/export-docs" element={<ExportDocsPage />} />
           <Route path="/grading" element={<GradingPage />} />
           <Route path="/forecasting" element={<ForecastingPage />} />
           <Route path="/traceability" element={<TraceabilityPage />} />

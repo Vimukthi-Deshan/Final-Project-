@@ -389,3 +389,80 @@ export async function verifyBatchHybrid(batchId: string) {
     `/traceability/batches/${normalizedBatchId}/verify`,
   );
 }
+
+export interface InvoiceParty {
+  name: string;
+  address: string;
+  contact: string;
+  email: string;
+  taxId?: string;
+}
+
+export interface InvoiceItem {
+  productName: string;
+  quantity: number;
+  price: number;
+  lineTotal: number;
+  hsCode?: string;
+  quantityUnit?: string;
+  netWeight?: number;
+  grossWeight?: number;
+  grade?: string;
+  batchId?: string;
+}
+
+export interface ProformaInvoice {
+  documentId: string;
+  batchId: string;
+  type: "PROFORMA" | "COMMERCIAL";
+  date: string;
+  dueDate?: string;
+  currency: string;
+  seller: InvoiceParty;
+  buyer: InvoiceParty;
+  items: InvoiceItem[];
+  total: number;
+  paymentStatus: "unpaid" | "paid" | "pending" | "failed";
+  incoterm?: string;
+  incotermNamedPlace?: string;
+  portOfLoading?: string;
+  portOfDischarge?: string;
+  paymentTerms?: { term: string; notes?: string };
+  amountInWords?: string;
+  countryOfOrigin?: string;
+  blockchainRef?: {
+    txId?: string;
+    network?: string;
+    chainId?: number;
+    contractAddress?: string;
+    hash?: string;
+    explorerUrl?: string;
+    recordedAt?: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type InvoiceCreatePayload = Omit<
+  ProformaInvoice,
+  "documentId" | "total" | "paymentStatus" | "createdAt" | "updatedAt"
+> & {
+  items: Omit<InvoiceItem, "lineTotal">[];
+};
+
+export async function generateInvoice(payload: InvoiceCreatePayload) {
+  return request<ProformaInvoice>("/export-docs/generate", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function listInvoices() {
+  return request<ProformaInvoice[]>("/export-docs");
+}
+
+export async function getInvoice(documentId: string) {
+  return request<ProformaInvoice>(
+    `/export-docs/${encodeURIComponent(documentId)}`,
+  );
+}

@@ -57,10 +57,12 @@ export async function initMongo(): Promise<void> {
   const traceability = await getCollection("traceability_records");
   const forecastingDailyRows = await getCollection("forecasting_daily_rows");
   const forecastingIngestions = await getCollection("forecasting_ingestions");
+  const invoices = await getCollection("invoices");
 
   await suppliers.createIndex({ key: 1 }, { unique: true });
   await batches.createIndex({ key: 1 }, { unique: true });
   await traceability.createIndex({ mongoDbId: 1 }, { unique: true });
   await forecastingDailyRows.createIndex({ key: 1 }, { unique: true });
   await forecastingIngestions.createIndex({ key: 1 }, { unique: true });
+  await invoices.createIndex({ key: 1 }, { unique: true });
 }

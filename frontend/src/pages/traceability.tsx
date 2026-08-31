@@ -229,7 +229,12 @@ export default function TraceabilityPage() {
           {explorerUrl ? (
             <>
               <span>Explorer</span>
-              <a className="link-inline" href={explorerUrl} target="_blank" rel="noreferrer">
+              <a
+                className="link-inline"
+                href={explorerUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
                 Open transaction on explorer
               </a>
             </>
@@ -367,7 +372,9 @@ export default function TraceabilityPage() {
 
           <h4>Supplier Products</h4>
           {insights.supplier.products.length === 0 ? (
-            <p className="help-text">No products defined for this supplier profile yet.</p>
+            <p className="help-text">
+              No products defined for this supplier profile yet.
+            </p>
           ) : (
             <div className="forecast-table-wrap">
               <table className="forecast-table">

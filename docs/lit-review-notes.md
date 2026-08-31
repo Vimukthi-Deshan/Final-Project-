@@ -1,7 +1,9 @@
 ## 2.1 Introduction
+
 - This codebase implements an AI-integrated supply chain management system for the Canela Ceylon case study, with six named modules in project requirements: Supplier Management, Batch and Inventory Management, Export Documentation, AI Quality Grading, AI Demand Forecasting, and Ethereum Blockchain Traceability; implemented stack is Node.js + TypeScript + Express + MongoDB backend, React frontend, Python FastAPI AI services, and Solidity + Hardhat + ethers.js v6 on Sepolia (sources: README.md, docs/requirements.md, backend/src/routes/route-groups.md, frontend/src/App.tsx, blockchain/package.json).
 
 ## 2.2 Background of the Problem Domain
+
 - Project framing explicitly targets Ceylon cinnamon export operations with blockchain traceability (sources: README.md, docs/requirements.md).
 - Repo guardrails define operational data policy: metadata on-chain, full operational records in MongoDB (sources: README.md, docs/architecture-diagrams/system-architecture.md, backend/src/modules/traceability/README.md).
 - Business pain point to module mapping from repo docs and route structure:
@@ -13,11 +15,13 @@
 - Supplier/batch trust checks and buyer verification flow -> Blockchain Traceability module (backend/src/modules/traceability/traceability.routes.ts, frontend/src/pages/traceability.tsx, frontend/src/pages/verify.tsx).
 
 ## 2.3 Review of Existing Systems and Similar Applications
+
 - No named external competitor systems/platforms were found in current repo docs/comments/planning files.
 - NOT FOUND IN REPO - needs manual input: any benchmarked commercial or academic systems by name.
 - [CITE: existing systems research needed]
 
 ## 2.4 Requirement Engineering and User Needs
+
 - Functional requirements visible from implemented backend routes (all under /api/v1):
 - Suppliers: GET /suppliers, POST /suppliers (backend/src/modules/suppliers/suppliers.routes.ts).
 - Batches: GET /batches, POST /batches (backend/src/modules/batches/batches.routes.ts).
@@ -34,6 +38,7 @@
 - NOT FOUND IN REPO - needs manual input: explicit admin/exporter/supplier permission matrix and route guards.
 
 ## 2.5 Software Development Methodologies and SDLC Justification
+
 - Phase-based SDLC evidence exists in docs: Phase 1 to Phase 6 delivery plan (README.md).
 - Task tracking evidence exists with prioritized backlog and near-term deliverables (docs/task-list.md).
 - Scrum-specific artifacts (sprint IDs, standups, retrospectives, Notion/Jira links) are not present.
@@ -41,6 +46,7 @@
 - Current branch commit history is short and iterative: first commit, then forecasting testing commit, then suppliers/blockchain testing commit (git log --oneline -n 40 showed 3 commits on current branch).
 
 ## 2.6 System Architecture, Design Patterns, and Database Design
+
 - Runtime architecture wiring:
 - Express app applies CORS, JSON parser, morgan logging, in-memory rate limiter, and centralized error handler (backend/src/app.ts, backend/src/middleware/rate-limiter.ts, backend/src/middleware/error-handler.ts).
 - API aggregation uses grouped routers: core (suppliers/batches/inventory), AI (grading/forecasting), blockchain (traceability), docs (export-docs) (backend/src/routes/api-v1.routes.ts, backend/src/routes/core.routes.ts, backend/src/routes/ai.routes.ts, backend/src/routes/blockchain.routes.ts, backend/src/routes/docs.routes.ts).
@@ -59,12 +65,13 @@
 - NOT FOUND IN REPO - needs manual input: finalized physical schema for grading_runs/forecast_runs collections in production.
 - Hardhat module isolation rationale is explicitly documented: keep blockchain/ sibling to backend/ to avoid Hardhat 3 ESM conflict with backend module system (docs/architecture-diagrams/system-architecture.md).
 - Patterns visible in code:
-- Router-module composition pattern (routes/* + modules/*/*.routes.ts).
-- Store/repository-style data access separation (modules/*/*.store.ts).
+- Router-module composition pattern (routes/_ + modules/_/\*.routes.ts).
+- Store/repository-style data access separation (modules/_/_.store.ts).
 - Service layer for external chain integration (traceability.service.ts).
-- Middleware chain for cross-cutting concerns and response envelope standardization (app.ts, middleware/*).
+- Middleware chain for cross-cutting concerns and response envelope standardization (app.ts, middleware/\*).
 
 ## 2.7 AI Integration Approaches and Intelligent System Features
+
 - Random Forest grading implementation:
 - Grading FastAPI loads serialized model candidates in order: env GRADING_MODEL_PATH, then ai-services/grading/RandomCinnamon.pkl, then artifacts/grading_rf_track1.joblib fallback path (ai-services/grading/api.py).
 - Prediction endpoint uses three input fields: diameter_mm, color_category, texture_category (ai-services/grading/api.py).
@@ -77,7 +84,7 @@
 - Forecasting API supports model values naive, arima, prophet, lstm (ai-services/forecasting/api.py, backend/src/modules/forecasting/forecasting.routes.ts, frontend/src/pages/forecasting.tsx).
 - Benchmark code compares four models and outputs mape_percent, training_time_ms, inference_latency_ms, interpretability, deployment_decision (ai-services/forecasting/evaluate.py).
 - Metric explicitly implemented in evaluation code is MAPE; MAE/RMSE are not implemented in evaluate.py.
-- Code split strategy in evaluate.py is dynamic 80/20 (split_index = max(30, int(len(series)*0.8))).
+- Code split strategy in evaluate.py is dynamic 80/20 (split_index = max(30, int(len(series)\*0.8))).
 - Requirements doc states a fixed 10 months / 2 months split and synthetic daily dataset target; this is a documented target that differs from current evaluate.py implementation (docs/requirements.md vs ai-services/forecasting/evaluate.py).
 - Forecasting data ingestion endpoint merges website and daraz CSV paid-order rows to target paid_order_count and persists merged rows and ingestion record before calling forecasting service with custom_series (backend/src/modules/forecasting/forecasting.routes.ts, backend/src/modules/forecasting/forecasting.store.ts).
 - [CITE: ARIMA vs Prophet vs LSTM demand forecasting comparison studies]
@@ -95,6 +102,7 @@
 - [CITE: off-chain storage with on-chain hash anchoring design trade-offs]
 
 ## 2.8 UI/UX, Accessibility, and Human-Computer Interaction
+
 - Implemented frontend UI features in code:
 - Dashboard metric cards (service health, suppliers, batches, inventory total) using aggregated API calls (frontend/src/pages/dashboard.tsx).
 - Supplier create form with optional auto-record-on-chain and blockchain metadata display card (frontend/src/pages/suppliers.tsx).
@@ -113,6 +121,7 @@
 - UI features requested in prompt but not found as implemented features in current frontend pages: product filtering controls, hover video interactions, and dedicated proforma invoice UI workflow.
 
 ## 2.9 Security, Privacy, Scalability, and Deployment Considerations
+
 - Authentication/authorization:
 - No JWT/session/auth middleware or role guards were found in backend route handling.
 - NOT FOUND IN REPO - needs manual input: auth model, role-policy matrix, and token/session design.
@@ -131,6 +140,7 @@
 - NOT FOUND IN REPO - no k6 script files or thresholds currently implemented; only planning mentions exist (README.md, docs/task-list.md, docs/copilot-master-prompt-v2.md).
 
 ## 2.10 Software Testing and Quality Assurance Approaches
+
 - Backend test framework dependency exists (Jest + ts-jest), and npm test script is jest --passWithNoTests (backend/package.json).
 - backend/tests currently contains only .gitkeep (no test cases).
 - Blockchain package has hardhat test script configured, but blockchain/test directory is empty.
@@ -145,6 +155,7 @@
 - NOT FOUND IN REPO - evaluation artifact file ai-services/grading/artifacts/grading_evaluation_report.json is absent in current workspace.
 
 ## 2.11 System Gap and Justification for the Proposed Solution
+
 - Explicit gap/insufficiency signals in repo docs:
 - docs/task-list.md states forecasting was previously placeholder/unfinished and required real model pipeline completion and comparison reporting.
 - docs/task-list.md highlights need for end-to-end runtime smoke tests with real Mongo Atlas + Sepolia integration, implying prior incompleteness in integrated validation.
@@ -153,12 +164,14 @@
 - NOT FOUND IN REPO - needs manual input: positionality/ethics-form narrative (for example CEO/researcher dual-role reflections) and any formal problem statement excerpts from proposal documents not present here.
 
 ## 2.12 Summary
+
 - The implemented system is organized around six requirements-defined modules, with route-grouped Node.js backend and React UI pages aligned to supplier, batch, grading, forecasting, and traceability workflows (README.md, docs/requirements.md, backend/src/routes/route-groups.md, frontend/src/App.tsx).
 - AI integration is operational through FastAPI grading and forecasting services called from backend routes, with grading model-loading logic and forecasting ingestion-to-prediction pipeline implemented in code (backend/src/modules/grading/grading.routes.ts, backend/src/modules/forecasting/forecasting.routes.ts, ai-services/grading/api.py, ai-services/forecasting/api.py).
-- Blockchain traceability is implemented as Sepolia-only supplier-record registration/verification with ethers.js v6 and a proxy-deployed Solidity registry contract, while MongoDB stores richer operational details (backend/src/modules/traceability/*, blockchain/contracts/*, blockchain/deployments.sepolia.json).
+- Blockchain traceability is implemented as Sepolia-only supplier-record registration/verification with ethers.js v6 and a proxy-deployed Solidity registry contract, while MongoDB stores richer operational details (backend/src/modules/traceability/_, blockchain/contracts/_, blockchain/deployments.sepolia.json).
 - QA/performance automation remains a current gap in this snapshot (empty backend tests, empty blockchain tests, no k6 scripts present), which should be documented as a limitation and future work item (backend/tests, blockchain/test, docs/task-list.md).
 
 ## Citations Needed
+
 - [ ] [CITE: existing systems research needed]
 - [ ] [CITE: Random Forest for tabular classification — find 1-2 sources]
 - [ ] [CITE: ISO 6539:2014 and SLS 81:2021 grading boundary usage in cinnamon quality assessment]

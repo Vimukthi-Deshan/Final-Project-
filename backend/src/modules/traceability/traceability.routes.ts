@@ -384,7 +384,9 @@ router.get("/traceability/suppliers/:mongoDbId/insights", async (req, res) => {
       error instanceof Error
         ? error.message
         : "Unknown supplier insights read error";
-    res.status(400).json(fail("SUPPLIER_TRACEABILITY_INSIGHTS_FAILED", message));
+    res
+      .status(400)
+      .json(fail("SUPPLIER_TRACEABILITY_INSIGHTS_FAILED", message));
   }
 });
 
