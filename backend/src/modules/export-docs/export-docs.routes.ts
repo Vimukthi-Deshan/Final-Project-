@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { HttpError } from "../../middleware/http-error";
 import { fail, ok } from "../../middleware/response-envelope";
+import { requireAuth } from "../../middleware/auth.middleware";
 import { getInvoiceById, listInvoices, saveInvoice } from "./export-docs.store";
 
 const partySchema = z.object({
@@ -49,7 +50,7 @@ const invoiceSchema = z.object({
 
 const router = Router();
 
-router.post("/export-docs/generate", async (req, res, next) => {
+router.post("/export-docs/generate", requireAuth, async (req, res, next) => {
   const parsed = invoiceSchema.safeParse(req.body);
   if (!parsed.success) {
     return next(

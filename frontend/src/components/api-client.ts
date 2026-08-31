@@ -15,13 +15,21 @@ type ErrorEnvelope = {
 
 type ApiEnvelope<T> = SuccessEnvelope<T> | ErrorEnvelope;
 
+import { getToken } from "../lib/auth";
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:4000/api/v1";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const token = getToken();
+  const authHeaders: Record<string, string> = token
+    ? { authorization: `Bearer ${token}` }
+    : {};
+
   const response = await fetch(`${API_BASE_URL}${path}`, {
     headers: {
       "content-type": "application/json",
+      ...authHeaders,
       ...(init?.headers ?? {}),
     },
     ...init,
@@ -130,6 +138,24 @@ export type BatchCreatePayload = Omit<
 export async function fetchHealth() {
   return request<{ status: string; service: string; version: string }>(
     "/health",
+  );
+}
+
+export async function loginUser(username: string, password: string) {
+  return request<{
+    token: string;
+    role: string;
+    username: string;
+    expiresIn: string;
+  }>("/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+  });
+}
+
+export async function fetchMe() {
+  return request<{ userId: string; username: string; role: string }>(
+    "/auth/me",
   );
 }
 

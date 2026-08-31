@@ -3,6 +3,7 @@ import { keccak256, toUtf8Bytes } from "ethers";
 import { z } from "zod";
 
 import { fail, ok } from "../../middleware/response-envelope";
+import { requireAuth } from "../../middleware/auth.middleware";
 import { getBatchById, listBatches } from "../batches/batches.store";
 import {
   getSupplierByName,
@@ -38,65 +39,70 @@ function buildExplorerUrl(txHash: string): string {
   return `${explorerBase}/${txHash}`;
 }
 
-router.post("/blockchain-registration/:mongoDbId", async (req, res) => {
-  try {
-    const mongoDbId = normalizeId(req.params.mongoDbId);
-    const parsed = recordSupplierSchema.safeParse(req.body);
-    if (!parsed.success) {
-      res.status(400).json(
-        fail(
-          "INVALID_SUPPLIER_REGISTRATION_PAYLOAD",
-          "Payload validation failed",
-          {
-            issues: parsed.error.issues,
-          },
-        ),
-      );
-      return;
+router.post(
+  "/blockchain-registration/:mongoDbId",
+  requireAuth,
+  async (req, res) => {
+    try {
+      const mongoDbId = normalizeId(req.params.mongoDbId);
+      const parsed = recordSupplierSchema.safeParse(req.body);
+      if (!parsed.success) {
+        res.status(400).json(
+          fail(
+            "INVALID_SUPPLIER_REGISTRATION_PAYLOAD",
+            "Payload validation failed",
+            {
+              issues: parsed.error.issues,
+            },
+          ),
+        );
+        return;
+      }
+
+      const payload = parsed.data as Omit<RecordSupplierInput, "mongoDbId">;
+      const input: RecordSupplierInput = {
+        mongoDbId,
+        dataHash: payload.dataHash,
+        productCount: payload.productCount,
+      };
+
+      const service = new TraceabilityService();
+      const result = await service.recordSupplier(input);
+
+      await upsertTraceabilityRecord(input.mongoDbId, {
+        dataHash: input.dataHash,
+        productCount: input.productCount,
+        verifiedOnChain: false,
+        lastAction: "record",
+        txHash: result.txHash,
+        network: result.network,
+        chainId: result.chainId,
+        contractAddress: result.contractAddress,
+        blockNumber: result.blockNumber,
+      });
+
+      await updateSupplierBlockchainRef(input.mongoDbId, {
+        txId: result.txHash,
+        network: result.network,
+        chainId: result.chainId,
+        contractAddress: result.contractAddress,
+        hash: input.dataHash,
+        explorerUrl: buildExplorerUrl(result.txHash),
+        recordedAt: new Date().toISOString(),
+      });
+
+      res.status(200).json(ok(result));
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unknown registration error";
+      res.status(400).json(fail("BLOCKCHAIN_REGISTRATION_FAILED", message));
     }
-
-    const payload = parsed.data as Omit<RecordSupplierInput, "mongoDbId">;
-    const input: RecordSupplierInput = {
-      mongoDbId,
-      dataHash: payload.dataHash,
-      productCount: payload.productCount,
-    };
-
-    const service = new TraceabilityService();
-    const result = await service.recordSupplier(input);
-
-    await upsertTraceabilityRecord(input.mongoDbId, {
-      dataHash: input.dataHash,
-      productCount: input.productCount,
-      verifiedOnChain: false,
-      lastAction: "record",
-      txHash: result.txHash,
-      network: result.network,
-      chainId: result.chainId,
-      contractAddress: result.contractAddress,
-      blockNumber: result.blockNumber,
-    });
-
-    await updateSupplierBlockchainRef(input.mongoDbId, {
-      txId: result.txHash,
-      network: result.network,
-      chainId: result.chainId,
-      contractAddress: result.contractAddress,
-      hash: input.dataHash,
-      explorerUrl: buildExplorerUrl(result.txHash),
-      recordedAt: new Date().toISOString(),
-    });
-
-    res.status(200).json(ok(result));
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Unknown registration error";
-    res.status(400).json(fail("BLOCKCHAIN_REGISTRATION_FAILED", message));
-  }
-});
+  },
+);
 
 router.post(
   "/blockchain-registration/:mongoDbId/auto-record",
+  requireAuth,
   async (req, res) => {
     try {
       const mongoDbId = normalizeId(req.params.mongoDbId);
@@ -199,45 +205,50 @@ router.post(
   },
 );
 
-router.post("/blockchain-registration/:mongoDbId/verify", async (req, res) => {
-  try {
-    const mongoDbId = normalizeId(req.params.mongoDbId);
-    const service = new TraceabilityService();
-    const result = await service.markSupplierVerified(mongoDbId);
+router.post(
+  "/blockchain-registration/:mongoDbId/verify",
+  requireAuth,
+  async (req, res) => {
+    try {
+      const mongoDbId = normalizeId(req.params.mongoDbId);
+      const service = new TraceabilityService();
+      const result = await service.markSupplierVerified(mongoDbId);
 
-    await upsertTraceabilityRecord(mongoDbId, {
-      verifiedOnChain: true,
-      lastAction: "verify",
-      txHash: result.txHash,
-      network: result.network,
-      chainId: result.chainId,
-      contractAddress: result.contractAddress,
-      blockNumber: result.blockNumber,
-    });
+      await upsertTraceabilityRecord(mongoDbId, {
+        verifiedOnChain: true,
+        lastAction: "verify",
+        txHash: result.txHash,
+        network: result.network,
+        chainId: result.chainId,
+        contractAddress: result.contractAddress,
+        blockNumber: result.blockNumber,
+      });
 
-    const state = await service.verifySupplier(mongoDbId);
-    await updateSupplierBlockchainRef(mongoDbId, {
-      txId: result.txHash,
-      network: result.network,
-      chainId: result.chainId,
-      contractAddress: result.contractAddress,
-      hash: state.dataHash,
-      explorerUrl: buildExplorerUrl(result.txHash),
-      recordedAt: new Date().toISOString(),
-    });
+      const state = await service.verifySupplier(mongoDbId);
+      await updateSupplierBlockchainRef(mongoDbId, {
+        txId: result.txHash,
+        network: result.network,
+        chainId: result.chainId,
+        contractAddress: result.contractAddress,
+        hash: state.dataHash,
+        explorerUrl: buildExplorerUrl(result.txHash),
+        recordedAt: new Date().toISOString(),
+      });
 
-    res.status(200).json(ok(result));
-  } catch (error) {
-    const message =
-      error instanceof Error
-        ? error.message
-        : "Unknown verification update error";
-    res.status(400).json(fail("BLOCKCHAIN_VERIFY_UPDATE_FAILED", message));
-  }
-});
+      res.status(200).json(ok(result));
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unknown verification update error";
+      res.status(400).json(fail("BLOCKCHAIN_VERIFY_UPDATE_FAILED", message));
+    }
+  },
+);
 
 router.patch(
   "/blockchain-registration/:mongoDbId/products",
+  requireAuth,
   async (req, res) => {
     try {
       const mongoDbId = normalizeId(req.params.mongoDbId);

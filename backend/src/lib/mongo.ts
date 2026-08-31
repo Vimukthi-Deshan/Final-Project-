@@ -58,6 +58,7 @@ export async function initMongo(): Promise<void> {
   const forecastingDailyRows = await getCollection("forecasting_daily_rows");
   const forecastingIngestions = await getCollection("forecasting_ingestions");
   const invoices = await getCollection("invoices");
+  const users = await getCollection("users");
 
   await suppliers.createIndex({ key: 1 }, { unique: true });
   await batches.createIndex({ key: 1 }, { unique: true });
@@ -65,4 +66,5 @@ export async function initMongo(): Promise<void> {
   await forecastingDailyRows.createIndex({ key: 1 }, { unique: true });
   await forecastingIngestions.createIndex({ key: 1 }, { unique: true });
   await invoices.createIndex({ key: 1 }, { unique: true });
+  await users.createIndex({ key: 1 }, { unique: true });
 }

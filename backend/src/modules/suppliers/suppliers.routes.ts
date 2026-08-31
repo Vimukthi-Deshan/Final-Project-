@@ -3,6 +3,7 @@ import { keccak256, toUtf8Bytes } from "ethers";
 import { z } from "zod";
 
 import { fail, ok } from "../../middleware/response-envelope";
+import { requireAuth, requireAdmin } from "../../middleware/auth.middleware";
 import { upsertTraceabilityRecord } from "../traceability/traceability.store";
 import { TraceabilityService } from "../traceability/traceability.service";
 import {
@@ -107,7 +108,7 @@ router.get("/suppliers", async (_req, res) => {
   }
 });
 
-router.post("/suppliers", async (req, res) => {
+router.post("/suppliers", requireAuth, async (req, res) => {
   try {
     const parsed = supplierSchema.safeParse(req.body);
     if (!parsed.success) {

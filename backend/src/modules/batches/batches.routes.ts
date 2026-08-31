@@ -3,6 +3,7 @@ import QRCode from "qrcode";
 import { z } from "zod";
 
 import { fail, ok } from "../../middleware/response-envelope";
+import { requireAuth } from "../../middleware/auth.middleware";
 import { getBatchById, listBatches, saveBatch } from "./batches.store";
 
 const batchIdPattern = /^CC-BATCH-[0-9]{4}-[0-9]{2}-[0-9]{5}$/;
@@ -61,7 +62,7 @@ router.get("/batches", async (_req, res) => {
   }
 });
 
-router.post("/batches", async (req, res) => {
+router.post("/batches", requireAuth, async (req, res) => {
   try {
     const parsed = batchSchema.safeParse(req.body);
     if (!parsed.success) {

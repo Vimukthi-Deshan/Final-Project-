@@ -41,6 +41,99 @@ body {
   padding: 0.5rem 1rem;
 }
 
+/* Topbar user panel */
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+
+.topbar-username {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.topbar-role-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.role-admin {
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+.role-user {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.topbar-logout {
+  width: auto;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.82rem;
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.topbar-logout:hover {
+  background: #e5e7eb;
+}
+
+/* Login screen */
+.login-backdrop {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    circle at top left,
+    #fff8ef 0%,
+    #f7f1ea 38%,
+    #f8f5f1 100%
+  );
+}
+
+.login-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+}
+
+.login-brand {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 0.2rem;
+}
+
+.login-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+}
+
+.login-hint {
+  margin: 1rem 0 0;
+  font-size: 0.78rem;
+  color: #9ca3af;
+  text-align: center;
+}
+
 .brand-group {
   display: flex;
   align-items: center;
